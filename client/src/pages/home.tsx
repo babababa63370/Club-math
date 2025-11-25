@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun, X, Star, Share2, Maximize2 } from "lucide-react";
-import { useTheme } from "@/components/theme-provider";
+import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun, X, Star, Share2, Maximize2, HelpCircle } from "lucide-react";
+import { Link } from "wouter";
+import { useTheme, type ColorPalette } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -27,12 +28,16 @@ export default function Home() {
   const [showInfo, setShowInfo] = useState(false);
   const [showFavorites, setShowFavorites] = useState(false);
   const [showFullscreen, setShowFullscreen] = useState(false);
+  const [showGlobalStats, setShowGlobalStats] = useState(false);
+  const [showInverse, setShowInverse] = useState(false);
+  const [inverseTarget, setInverseTarget] = useState("");
   const [totalVisits, setTotalVisits] = useState(0);
   const [currentVisitors, setCurrentVisitors] = useState(1);
+  const [totalCalculations, setTotalCalculations] = useState(0);
   const resultsRef = useRef<HTMLDivElement>(null);
   const multiResultsRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<HTMLDivElement>(null);
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, colorPalette, setColorPalette, showColorPicker, setShowColorPicker } = useTheme();
   
   const currentNumber = result ? parseInt(inputValue) : null;
   const isFav = currentNumber ? isFavorite(currentNumber) : false;
@@ -46,6 +51,11 @@ export default function Home() {
     const total = stored ? parseInt(stored, 10) + 1 : 1;
     localStorage.setItem("total-visits", total.toString());
     setTotalVisits(total);
+    
+    // Track total calculations
+    const storedCalcs = localStorage.getItem("total-calculations");
+    const calcs = storedCalcs ? parseInt(storedCalcs, 10) : 0;
+    setTotalCalculations(calcs);
     
     // Track current visitors (simulated)
     const sessionId = sessionStorage.getItem("session-id") || `session-${Date.now()}-${Math.random()}`;
@@ -107,6 +117,12 @@ export default function Home() {
       setMultiResults(results);
       results.forEach(r => addToHistory(r.inputNumber, r.result));
     }
+    
+    // Update calculation count
+    const current = localStorage.getItem("total-calculations");
+    const updated = (current ? parseInt(current, 10) : 0) + parsedNumbers.length;
+    localStorage.setItem("total-calculations", updated.toString());
+    setTotalCalculations(updated);
     
     setHistory(getHistory());
   };
@@ -225,6 +241,17 @@ export default function Home() {
     }
   };
 
+  const findNumbersWithCycle = (targetCycle: number, maxSearch: number = 100) => {
+    const matching = [];
+    for (let i = 1; i <= maxSearch; i++) {
+      const result = calculateSquareSum(i);
+      if (result.cycleLength === targetCycle) {
+        matching.push(i);
+      }
+    }
+    return matching;
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-6 py-12">
@@ -255,7 +282,12 @@ export default function Home() {
                 variant="outline"
                 size="icon"
                 onClick={toggleTheme}
+                onDoubleClick={(e) => {
+                  e.stopPropagation();
+                  setShowColorPicker(true);
+                }}
                 data-testid="button-toggle-theme"
+                title="Double-clic pour les couleurs"
               >
                 {theme === "light" ? (
                   <Moon className="h-5 w-5" />
@@ -263,6 +295,15 @@ export default function Home() {
                   <Sun className="h-5 w-5" />
                 )}
               </Button>
+              <Link href="/about">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  data-testid="button-about"
+                >
+                  <HelpCircle className="h-5 w-5" />
+                </Button>
+              </Link>
               <Button
                 variant="outline"
                 size="icon"
@@ -305,6 +346,17 @@ export default function Home() {
                 Calculer
               </Button>
               
+              <Button
+                onClick={() => setShowInverse(true)}
+                variant="outline"
+                size="icon"
+                className="h-14 w-14"
+                data-testid="button-inverse"
+                title="Trouver nombres par cycle"
+              >
+                <RefreshCw className="h-5 w-5" />
+              </Button>
+              
               {(result || multiResults.length > 0) && (
                 <Button
                   onClick={handleReset}
@@ -313,7 +365,7 @@ export default function Home() {
                   className="h-14 w-14"
                   data-testid="button-reset"
                 >
-                  <RefreshCw className="h-5 w-5" />
+                  <X className="h-5 w-5" />
                 </Button>
               )}
             </div>
@@ -435,6 +487,34 @@ export default function Home() {
           </Card>
         )}
 
+        <Dialog open={showColorPicker} onOpenChange={setShowColorPicker}>
+          <DialogContent className="max-w-md" data-testid="color-picker">
+            <DialogHeader>
+              <DialogTitle>Sélectionner une Couleur</DialogTitle>
+            </DialogHeader>
+            <div className="grid grid-cols-2 gap-4">
+              {(["blue", "purple", "cyan", "amber"] as const).map((palette) => (
+                <button
+                  key={palette}
+                  onClick={() => setColorPalette(palette)}
+                  className={`p-4 rounded-lg border-2 transition-all ${
+                    colorPalette === palette ? "border-primary" : "border-border"
+                  } hover-elevate`}
+                  data-testid={`color-${palette}`}
+                >
+                  <div className={`h-12 rounded-md mb-2 ${
+                    palette === "blue" ? "bg-blue-500" :
+                    palette === "purple" ? "bg-purple-500" :
+                    palette === "cyan" ? "bg-cyan-500" :
+                    "bg-amber-500"
+                  }`} />
+                  <p className="font-semibold capitalize">{palette === "blue" ? "Bleu" : palette === "purple" ? "Violet" : palette === "cyan" ? "Cyan" : "Ambre"}</p>
+                </button>
+              ))}
+            </div>
+          </DialogContent>
+        </Dialog>
+
         <Dialog open={showInfo} onOpenChange={setShowInfo}>
           <DialogContent className="max-w-md" data-testid="info-dialog">
             <DialogHeader>
@@ -458,10 +538,65 @@ export default function Home() {
                   Visites totales de tous les temps
                 </p>
               </div>
+
+              <div className="bg-primary/10 p-6 rounded-lg text-center">
+                <div className="text-4xl font-bold text-primary mb-2">
+                  {totalCalculations}
+                </div>
+                <p className="text-muted-foreground text-sm">
+                  Calculs effectués au total
+                </p>
+              </div>
               
               <p className="text-xs text-muted-foreground text-center">
                 Les statistiques sont sauvegardées localement dans votre navigateur.
               </p>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={showInverse} onOpenChange={setShowInverse}>
+          <DialogContent className="max-w-md" data-testid="inverse-dialog">
+            <DialogHeader>
+              <DialogTitle>Trouver Nombres par Cycle</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Longueur du cycle à rechercher
+                </label>
+                <input
+                  type="number"
+                  value={inverseTarget}
+                  onChange={(e) => setInverseTarget(e.target.value)}
+                  placeholder="Ex: 1 pour les nombres heureux"
+                  className="w-full px-3 py-2 border rounded-lg bg-background"
+                  min="1"
+                  max="20"
+                />
+              </div>
+              {inverseTarget && !isNaN(parseInt(inverseTarget)) && (
+                <div className="bg-muted/50 p-4 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Nombres (1-100) avec cycle de {inverseTarget} :
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {findNumbersWithCycle(parseInt(inverseTarget)).map((num) => (
+                      <button
+                        key={num}
+                        onClick={() => {
+                          setInputValue(num.toString());
+                          handleCalculate();
+                          setShowInverse(false);
+                        }}
+                        className="px-3 py-1 bg-primary text-primary-foreground rounded-lg text-sm hover-elevate cursor-pointer"
+                      >
+                        {num}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </DialogContent>
         </Dialog>
