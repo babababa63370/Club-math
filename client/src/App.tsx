@@ -9,6 +9,8 @@ import About from "@/pages/about";
 import Dev5524 from "@/pages/dev-5524";
 import Fake from "@/pages/fake";
 import Game from "@/pages/game";
+import HallOfFame from "@/pages/hall-of-fame";
+import Art from "@/pages/art";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -19,6 +21,8 @@ function Router() {
       <Route path="/dev-5524" component={Dev5524} />
       <Route path="/fake" component={Fake} />
       <Route path="/game" component={Game} />
+      <Route path="/hall-of-fame" component={HallOfFame} />
+      <Route path="/art" component={Art} />
       <Route component={NotFound} />
     </Switch>
   );

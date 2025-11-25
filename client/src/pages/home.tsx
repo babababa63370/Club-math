@@ -434,6 +434,8 @@ export default function Home() {
 
                 <div className="border-t my-2" />
 
+                <div className="border-t my-2" />
+
                 <Link href="/game">
                   <button
                     onClick={() => setShowMobileMenu(false)}
@@ -441,6 +443,26 @@ export default function Home() {
                   >
                     <span className="text-lg">🎮</span>
                     <span>Jeu du Cycle</span>
+                  </button>
+                </Link>
+
+                <Link href="/hall-of-fame">
+                  <button
+                    onClick={() => setShowMobileMenu(false)}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+                  >
+                    <span className="text-lg">🏆</span>
+                    <span>Hall of Fame</span>
+                  </button>
+                </Link>
+
+                <Link href="/art">
+                  <button
+                    onClick={() => setShowMobileMenu(false)}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+                  >
+                    <span className="text-lg">🎨</span>
+                    <span>Générateur Art</span>
                   </button>
                 </Link>
 
