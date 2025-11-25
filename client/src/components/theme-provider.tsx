@@ -56,6 +56,9 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   }, []);
 
   const applyTheme = (newTheme: "light" | "dark", palette: ColorPalette = colorPalette) => {
+    // Add transition class
+    document.documentElement.classList.add("theme-transitioning");
+    
     if (newTheme === "dark") {
       document.documentElement.classList.add("dark");
     } else {
@@ -69,6 +72,11 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     
     localStorage.setItem("theme", newTheme);
     localStorage.setItem("color-palette", palette);
+    
+    // Remove transition class after animation completes
+    setTimeout(() => {
+      document.documentElement.classList.remove("theme-transitioning");
+    }, 400);
   };
 
   const toggleTheme = () => {
