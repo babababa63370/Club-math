@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun, X } from "lucide-react";
+import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun, X, Star, Share2, Maximize2 } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { calculateSquareSum } from "@/lib/cycleDetector";
 import { getHistory, addToHistory, clearHistory, deleteHistoryEntry } from "@/lib/historyStorage";
+import { getFavorites, addFavorite, removeFavorite, isFavorite } from "@/lib/favoritesStorage";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from "recharts";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -21,16 +22,24 @@ export default function Home() {
   const [multiResults, setMultiResults] = useState<MultiCalculationResult[]>([]);
   const [error, setError] = useState("");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [favorites, setFavorites] = useState<ReturnType<typeof getFavorites>>([]);
   const [showHistory, setShowHistory] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [showFavorites, setShowFavorites] = useState(false);
+  const [showFullscreen, setShowFullscreen] = useState(false);
   const [totalVisits, setTotalVisits] = useState(0);
   const [currentVisitors, setCurrentVisitors] = useState(1);
   const resultsRef = useRef<HTMLDivElement>(null);
   const multiResultsRef = useRef<HTMLDivElement>(null);
+  const graphRef = useRef<HTMLDivElement>(null);
   const { theme, toggleTheme } = useTheme();
+  
+  const currentNumber = result ? parseInt(inputValue) : null;
+  const isFav = currentNumber ? isFavorite(currentNumber) : false;
 
   useEffect(() => {
     setHistory(getHistory());
+    setFavorites(getFavorites());
     
     // Track total visits
     const stored = localStorage.getItem("total-visits");
@@ -47,6 +56,9 @@ export default function Home() {
     // Simulate current visitors (random between 1-5)
     const visitors = Math.floor(Math.random() * 4) + 1;
     setCurrentVisitors(visitors);
+    
+    // Load from URL parameters if present
+    handleLoadFromParams();
   }, []);
 
   const handleCalculate = () => {
@@ -181,6 +193,38 @@ export default function Home() {
     }
   };
 
+  const handleAddFavorite = () => {
+    if (result && currentNumber) {
+      addFavorite(currentNumber, result);
+      setFavorites(getFavorites());
+    }
+  };
+
+  const handleRemoveFavorite = () => {
+    if (currentNumber) {
+      removeFavorite(currentNumber);
+      setFavorites(getFavorites());
+    }
+  };
+
+  const handleShareLink = () => {
+    const number = inputValue.trim();
+    if (!number) return;
+    const url = `${window.location.origin}?number=${number}`;
+    navigator.clipboard.writeText(url);
+    alert("Lien copié dans le presse-papiers !");
+  };
+
+  const handleLoadFromParams = () => {
+    const params = new URLSearchParams(window.location.search);
+    const number = params.get("number");
+    if (number && /^\d+$/.test(number)) {
+      setInputValue(number);
+      const calculationResult = calculateSquareSum(parseInt(number, 10));
+      setResult(calculationResult);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-6 py-12">
@@ -191,6 +235,14 @@ export default function Home() {
               Détecteur de Cycles Mathématiques
             </h1>
             <div className="flex-1 flex justify-end gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setShowFavorites(!showFavorites)}
+                data-testid="button-toggle-favorites"
+              >
+                <Star className={`h-5 w-5 ${showFavorites ? "fill-yellow-500" : ""}`} />
+              </Button>
               <Button
                 variant="outline"
                 size="icon"
@@ -267,6 +319,46 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        {showFavorites && (
+          <Card className="p-6 rounded-xl mb-8" data-testid="favorites-panel">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-semibold flex items-center gap-2">
+                <Star className="h-6 w-6 fill-yellow-500" />
+                Mes Favoris
+              </h2>
+            </div>
+            
+            {favorites.length === 0 ? (
+              <p className="text-center text-muted-foreground py-8">
+                Aucun favori sauvegardé
+              </p>
+            ) : (
+              <ScrollArea className="h-[300px]">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {favorites.map((fav) => (
+                    <Card
+                      key={fav.id}
+                      className="p-3 text-center hover-elevate active-elevate-2 cursor-pointer"
+                      onClick={() => {
+                        setInputValue(fav.inputNumber.toString());
+                        setResult(fav.result);
+                        setShowFavorites(false);
+                      }}
+                    >
+                      <div className="text-xl font-mono font-bold text-primary">
+                        {fav.inputNumber}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {fav.result.cycleLength} cycle
+                      </p>
+                    </Card>
+                  ))}
+                </div>
+              </ScrollArea>
+            )}
+          </Card>
+        )}
 
         {showHistory && (
           <Card className="p-6 rounded-xl mb-8" data-testid="history-panel">
@@ -370,6 +462,62 @@ export default function Home() {
               <p className="text-xs text-muted-foreground text-center">
                 Les statistiques sont sauvegardées localement dans votre navigateur.
               </p>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={showFullscreen} onOpenChange={setShowFullscreen}>
+          <DialogContent className="max-w-4xl h-[90vh]" data-testid="fullscreen-graph">
+            <DialogHeader>
+              <DialogTitle>Graphique Plein Écran</DialogTitle>
+            </DialogHeader>
+            <div className="h-full overflow-auto">
+              {graphRef.current && (
+                <ResponsiveContainer width="100%" height={600}>
+                  <LineChart
+                    data={result?.steps.map((step) => ({
+                      etape: step.stepNumber + 1,
+                      valeur: step.originalNumber,
+                      estDansCycle: step.isInCycle,
+                    })) || []}
+                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="etape" label={{ value: "Étape", position: "insideBottom", offset: -5 }} />
+                    <YAxis label={{ value: "Valeur", angle: -90, position: "insideLeft" }} />
+                    <Tooltip />
+                    <Legend />
+                    {result?.cycleStartIndex ? (
+                      <ReferenceLine
+                        x={result.cycleStartIndex + 1}
+                        stroke="hsl(var(--primary))"
+                        strokeDasharray="5 5"
+                        label={{ value: "Début du cycle", position: "top", fill: "hsl(var(--primary))" }}
+                      />
+                    ) : null}
+                    <Line
+                      type="monotone"
+                      dataKey="valeur"
+                      stroke="hsl(var(--primary))"
+                      strokeWidth={2}
+                      dot={(props) => {
+                        const { cx, cy, payload } = props;
+                        return (
+                          <circle
+                            cx={cx}
+                            cy={cy}
+                            r={payload.estDansCycle ? 6 : 4}
+                            fill={payload.estDansCycle ? "hsl(var(--primary))" : "hsl(var(--foreground))"}
+                            stroke="hsl(var(--background))"
+                            strokeWidth={2}
+                          />
+                        );
+                      }}
+                      name="Valeur"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </DialogContent>
         </Dialog>
@@ -545,14 +693,41 @@ export default function Home() {
 
         {result && (
           <div className="space-y-6">
-            <div className="flex justify-end gap-2">
+            <div className="flex justify-end gap-2 flex-wrap">
+              {isFav ? (
+                <Button
+                  variant="outline"
+                  onClick={handleRemoveFavorite}
+                  data-testid="button-remove-favorite"
+                >
+                  <Star className="h-4 w-4 mr-2 fill-yellow-500" />
+                  Retirer des favoris
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  onClick={handleAddFavorite}
+                  data-testid="button-add-favorite"
+                >
+                  <Star className="h-4 w-4 mr-2" />
+                  Ajouter aux favoris
+                </Button>
+              )}
+              <Button
+                variant="outline"
+                onClick={handleShareLink}
+                data-testid="button-share"
+              >
+                <Share2 className="h-4 w-4 mr-2" />
+                Partager
+              </Button>
               <Button
                 variant="outline"
                 onClick={handleExportImage}
                 data-testid="button-export-image"
               >
                 <FileImage className="h-4 w-4 mr-2" />
-                Exporter en Image
+                Image
               </Button>
               <Button
                 variant="outline"
@@ -560,7 +735,7 @@ export default function Home() {
                 data-testid="button-export-pdf"
               >
                 <Download className="h-4 w-4 mr-2" />
-                Exporter en PDF
+                PDF
               </Button>
             </div>
 
@@ -716,10 +891,20 @@ export default function Home() {
 
               <TabsContent value="graph" className="mt-6">
                 <Card className="p-6 rounded-xl">
-                  <h3 className="text-xl font-semibold mb-6 text-center">
-                    Visualisation de la Séquence
-                  </h3>
-                  <ResponsiveContainer width="100%" height={400}>
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-xl font-semibold">Visualisation de la Séquence</h3>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowFullscreen(true)}
+                      data-testid="button-fullscreen"
+                    >
+                      <Maximize2 className="h-4 w-4 mr-2" />
+                      Fullscreen
+                    </Button>
+                  </div>
+                  <div ref={graphRef}>
+                    <ResponsiveContainer width="100%" height={400}>
                     <LineChart
                       data={result.steps.map((step) => ({
                         etape: step.stepNumber + 1,
@@ -791,10 +976,40 @@ export default function Home() {
                         name="Valeur"
                       />
                     </LineChart>
-                  </ResponsiveContainer>
-                  <p className="text-sm text-muted-foreground text-center mt-4">
-                    Les points plus grands et colorés indiquent les valeurs dans le cycle
-                  </p>
+                    </ResponsiveContainer>
+                    <p className="text-sm text-muted-foreground text-center mt-4">
+                      Les points plus grands et colorés indiquent les valeurs dans le cycle
+                    </p>
+                  </div>
+                </Card>
+
+                <Card className="p-6 rounded-xl mt-6">
+                  <h3 className="text-xl font-semibold mb-4 text-center">
+                    Analyse du Cycle
+                  </h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left p-2">Nombre</th>
+                          <th className="text-left p-2">Étape</th>
+                          <th className="text-left p-2">Dans le cycle</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {result.steps.map((step) => (
+                          <tr key={step.stepNumber} className={`border-b ${step.isInCycle ? "bg-primary/5" : ""}`}>
+                            <td className="p-2 font-mono font-bold">{step.originalNumber}</td>
+                            <td className="p-2">{step.stepNumber + 1}</td>
+                            <td className="p-2">
+                              {step.isInCycle && <Badge className="bg-primary">Oui</Badge>}
+                              {!step.isInCycle && <span className="text-muted-foreground">Non</span>}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </Card>
 
                 <Card className="p-6 rounded-xl mt-6" data-testid="card-statistics">
