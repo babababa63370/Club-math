@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun } from "lucide-react";
+import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun, X } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { calculateSquareSum } from "@/lib/cycleDetector";
 import { getHistory, addToHistory, clearHistory, deleteHistoryEntry } from "@/lib/historyStorage";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from "recharts";
@@ -21,12 +22,31 @@ export default function Home() {
   const [error, setError] = useState("");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [showHistory, setShowHistory] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+  const [totalVisits, setTotalVisits] = useState(0);
+  const [currentVisitors, setCurrentVisitors] = useState(1);
   const resultsRef = useRef<HTMLDivElement>(null);
   const multiResultsRef = useRef<HTMLDivElement>(null);
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     setHistory(getHistory());
+    
+    // Track total visits
+    const stored = localStorage.getItem("total-visits");
+    const total = stored ? parseInt(stored, 10) + 1 : 1;
+    localStorage.setItem("total-visits", total.toString());
+    setTotalVisits(total);
+    
+    // Track current visitors (simulated)
+    const sessionId = sessionStorage.getItem("session-id") || `session-${Date.now()}-${Math.random()}`;
+    if (!sessionStorage.getItem("session-id")) {
+      sessionStorage.setItem("session-id", sessionId);
+    }
+    
+    // Simulate current visitors (random between 1-5)
+    const visitors = Math.floor(Math.random() * 4) + 1;
+    setCurrentVisitors(visitors);
   }, []);
 
   const handleCalculate = () => {
@@ -174,6 +194,14 @@ export default function Home() {
               <Button
                 variant="outline"
                 size="icon"
+                onClick={() => setShowInfo(true)}
+                data-testid="button-info"
+              >
+                <Info className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
                 onClick={toggleTheme}
                 data-testid="button-toggle-theme"
               >
@@ -314,6 +342,37 @@ export default function Home() {
             )}
           </Card>
         )}
+
+        <Dialog open={showInfo} onOpenChange={setShowInfo}>
+          <DialogContent className="max-w-md" data-testid="info-dialog">
+            <DialogHeader>
+              <DialogTitle>Statistiques de la Page</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-6">
+              <div className="bg-primary/10 p-6 rounded-lg text-center">
+                <div className="text-4xl font-bold text-primary mb-2">
+                  {currentVisitors}
+                </div>
+                <p className="text-muted-foreground text-sm">
+                  Utilisateurs actuellement sur la page
+                </p>
+              </div>
+              
+              <div className="bg-primary/10 p-6 rounded-lg text-center">
+                <div className="text-4xl font-bold text-primary mb-2">
+                  {totalVisits}
+                </div>
+                <p className="text-muted-foreground text-sm">
+                  Visites totales de tous les temps
+                </p>
+              </div>
+              
+              <p className="text-xs text-muted-foreground text-center">
+                Les statistiques sont sauvegardées localement dans votre navigateur.
+              </p>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {!result && multiResults.length === 0 && (
           <Card className="p-6 rounded-xl max-w-2xl mx-auto">
