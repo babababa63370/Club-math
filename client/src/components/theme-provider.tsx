@@ -76,7 +76,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     // Remove transition class after animation completes
     setTimeout(() => {
       document.documentElement.classList.remove("theme-transitioning");
-    }, 400);
+    }, 1500);
   };
 
   const toggleTheme = () => {

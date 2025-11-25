@@ -5,7 +5,7 @@
 /* Theme transition animation */
 :root {
   color-scheme: light;
-  transition: background-color 0.4s ease, color 0.4s ease;
+  transition: background-color 1.5s ease, color 1.5s ease;
 }
 
 :root.dark {
@@ -14,8 +14,8 @@
 
 :root.theme-transitioning,
 :root.dark.theme-transitioning {
-  transition: background-color 0.4s ease, color 0.4s ease, 
-              border-color 0.4s ease;
+  transition: background-color 1.5s ease, color 1.5s ease, 
+              border-color 1.5s ease;
 }
 
 /* LIGHT MODE */
