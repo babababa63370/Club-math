@@ -164,12 +164,14 @@ export default function Art() {
                 À propos
               </button>
             </Link>
+            <div className="border-t my-2" />
+
             <Link href="/game">
               <button
                 onClick={() => setShowMobileMenu(false)}
                 className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
               >
-                🎮 Jeu
+                🎮 Jeu du Cycle
               </button>
             </Link>
             <Link href="/hall-of-fame">
@@ -177,7 +179,23 @@ export default function Art() {
                 onClick={() => setShowMobileMenu(false)}
                 className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
               >
-                🏆 Hall
+                🏆 Hall of Fame
+              </button>
+            </Link>
+            <Link href="/zen">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                🧘 Mode Zen
+              </button>
+            </Link>
+            <Link href="/fake">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                🎭 Mode Fake
               </button>
             </Link>
           </div>

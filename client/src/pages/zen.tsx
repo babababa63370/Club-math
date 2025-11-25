@@ -141,12 +141,38 @@ export default function Zen() {
                 À propos
               </button>
             </Link>
+            <div className="border-t my-2" />
+
             <Link href="/game">
               <button
                 onClick={() => setShowMobileMenu(false)}
                 className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
               >
-                🎮 Jeu
+                🎮 Jeu du Cycle
+              </button>
+            </Link>
+            <Link href="/hall-of-fame">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                🏆 Hall of Fame
+              </button>
+            </Link>
+            <Link href="/art">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                🎨 Générateur Art
+              </button>
+            </Link>
+            <Link href="/fake">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                🎭 Mode Fake
               </button>
             </Link>
           </div>
