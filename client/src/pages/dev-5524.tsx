@@ -1,30 +1,36 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Menu } from "lucide-react";
+import { SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 export default function Dev5524() {
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="mb-8">
-          <Link href="/">
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Retour
-            </Button>
-          </Link>
-        </div>
+  const [showMenu, setShowMenu] = useState(false);
 
-        <div className="space-y-12">
-          <div>
-            <h1 className="text-4xl font-bold mb-8">Code Source - Anecdote Dev</h1>
-          </div>
+  // Add animation styles
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      .animate-slide-in {
+        animation: slideIn 0.3s ease-out;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => style.remove();
+  }, []);
 
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold">TypeScript: Algorithme Principal</h2>
-              <div className="bg-card border rounded-lg p-6 font-mono text-sm overflow-x-auto">
-                <pre>{`export function calculateSquareSum(num: number): CalculationResult {
+  const typeScriptCode1 = `export function calculateSquareSum(num: number): CalculationResult {
   const steps: CalculationStep[] = [];
   const seen = new Map<number, number>();
   let current = num;
@@ -69,14 +75,9 @@ export default function Dev5524() {
   }
 
   return { steps, cycleStartIndex, cycleLength };
-}`}</pre>
-              </div>
-            </div>
+}`;
 
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold">TypeScript: Algorithme Inverse</h2>
-              <div className="bg-card border rounded-lg p-6 font-mono text-sm overflow-x-auto">
-                <pre>{`export function findNumbersWithCycle(
+  const typeScriptCode2 = `export function findNumbersWithCycle(
   targetCycle: number, 
   maxSearch: number = 100
 ): number[] {
@@ -93,15 +94,9 @@ export default function Dev5524() {
 }
 
 // findNumbersWithCycle(1) → nombres heureux
-// findNumbersWithCycle(8) → cycle courant`}</pre>
-              </div>
-            </div>
+// findNumbersWithCycle(8) → cycle courant`;
 
-            <div className="border-t pt-8 space-y-4">
-              <h2 className="text-2xl font-bold">Python: Algorithme Principal</h2>
-              <p className="text-sm text-muted-foreground">Prêt à copier-coller :</p>
-              <div className="bg-card border rounded-lg p-6 font-mono text-sm overflow-x-auto">
-                <pre>{`def calculate_square_sum(num):
+  const pythonCode1 = `def calculate_square_sum(num):
     """Décompose un nombre en chiffres, élève au carré, additionne, répète."""
     steps = []
     seen = {}
@@ -121,7 +116,7 @@ export default function Dev5524() {
         sum_result = sum(squared_digits)
         
         # Calcul lisible
-        calculation = ' + '.join(f'{d}²' for d in digits) + \
+        calculation = ' + '.join(f'{d}²' for d in digits) + \\
                      f' = {" + ".join(str(s) for s in squared_digits)} = {sum_result}'
         
         steps.append({
@@ -164,15 +159,9 @@ if __name__ == '__main__':
     print(f"Cycle: {result['cycle_length']}")
     
     for step in result['steps']:
-        print(f"Étape {step['step_number']}: {step['calculation']}")`}</pre>
-              </div>
-            </div>
+        print(f"Étape {step['step_number']}: {step['calculation']}")`;
 
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold">Python: Algorithme Inverse</h2>
-              <p className="text-sm text-muted-foreground">Chercher par longueur de cycle :</p>
-              <div className="bg-card border rounded-lg p-6 font-mono text-sm overflow-x-auto">
-                <pre>{`def find_numbers_with_cycle(target_cycle, max_search=100):
+  const pythonCode2 = `def find_numbers_with_cycle(target_cycle, max_search=100):
     """Trouve tous les nombres avec une longueur de cycle spécifique."""
     matching = []
     
@@ -193,7 +182,112 @@ if __name__ == '__main__':
     print(f"Nombres avec cycle=8: {cycle_8}")
     
     cycle_5 = find_numbers_with_cycle(5, 50)
-    print(f"Nombres avec cycle=5: {cycle_5}")`}</pre>
+    print(f"Nombres avec cycle=5: {cycle_5}")`;
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Mobile Menu Button */}
+      <div className="fixed top-6 right-6 md:hidden z-30">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => setShowMenu(!showMenu)}
+          data-testid="button-mobile-menu-dev"
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+      </div>
+
+      {/* Mobile Menu */}
+      {showMenu && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/20 z-40 md:hidden" 
+            onClick={() => setShowMenu(false)}
+          />
+          <div 
+            className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 md:hidden animate-slide-in p-4 space-y-3"
+          >
+            <Link href="/">
+              <button
+                onClick={() => setShowMenu(false)}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                <ArrowLeft className="h-5 w-5" />
+                <span>Retour</span>
+              </button>
+            </Link>
+          </div>
+        </>
+      )}
+
+      <div className="max-w-6xl mx-auto px-6 py-12">
+        <div className="mb-8">
+          <Link href="/">
+            <Button variant="outline" size="sm" className="hidden md:inline-flex">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Retour
+            </Button>
+          </Link>
+        </div>
+
+        <div className="space-y-12">
+          <div>
+            <h1 className="text-4xl font-bold mb-8">Code Source - Anecdote Dev</h1>
+          </div>
+
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold">TypeScript: Algorithme Principal</h2>
+              <div className="rounded-lg overflow-hidden">
+                <SyntaxHighlighter 
+                  language="typescript" 
+                  style={atomOneDark}
+                  customStyle={{ padding: '24px', borderRadius: '8px' }}
+                >
+                  {typeScriptCode1}
+                </SyntaxHighlighter>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold">TypeScript: Algorithme Inverse</h2>
+              <div className="rounded-lg overflow-hidden">
+                <SyntaxHighlighter 
+                  language="typescript" 
+                  style={atomOneDark}
+                  customStyle={{ padding: '24px', borderRadius: '8px' }}
+                >
+                  {typeScriptCode2}
+                </SyntaxHighlighter>
+              </div>
+            </div>
+
+            <div className="border-t pt-8 space-y-4">
+              <h2 className="text-2xl font-bold">Python: Algorithme Principal</h2>
+              <p className="text-sm text-muted-foreground">Prêt à copier-coller :</p>
+              <div className="rounded-lg overflow-hidden">
+                <SyntaxHighlighter 
+                  language="python" 
+                  style={atomOneDark}
+                  customStyle={{ padding: '24px', borderRadius: '8px' }}
+                >
+                  {pythonCode1}
+                </SyntaxHighlighter>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h2 className="text-2xl font-bold">Python: Algorithme Inverse</h2>
+              <p className="text-sm text-muted-foreground">Chercher par longueur de cycle :</p>
+              <div className="rounded-lg overflow-hidden">
+                <SyntaxHighlighter 
+                  language="python" 
+                  style={atomOneDark}
+                  customStyle={{ padding: '24px', borderRadius: '8px' }}
+                >
+                  {pythonCode2}
+                </SyntaxHighlighter>
               </div>
             </div>
 
