@@ -84,7 +84,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     setTimeout(() => {
       document.documentElement.classList.remove("theme-transitioning-to-dark");
       document.documentElement.classList.remove("theme-transitioning-to-light");
-    }, 3000);
+    }, 6000);
   };
 
   const toggleTheme = () => {

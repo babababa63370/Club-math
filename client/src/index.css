@@ -42,11 +42,11 @@
 }
 
 :root.theme-transitioning-to-light {
-  animation: themeTransitionToLight 3s ease forwards;
+  animation: themeTransitionToLight 6s ease forwards;
 }
 
 :root.theme-transitioning-to-dark {
-  animation: themeTransitionToDark 3s ease forwards;
+  animation: themeTransitionToDark 6s ease forwards;
 }
 
 /* LIGHT MODE */
