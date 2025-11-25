@@ -19,7 +19,7 @@ import type { CalculationResult, HistoryEntry, MultiCalculationResult } from "@s
 
 export default function Home() {
   // Add animation styles
-  React.useEffect(() => {
+  useEffect(() => {
     const style = document.createElement('style');
     style.textContent = `
       @keyframes slideIn {
