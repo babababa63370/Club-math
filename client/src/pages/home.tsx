@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage } from "lucide-react";
+import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun } from "lucide-react";
+import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -22,6 +23,7 @@ export default function Home() {
   const [showHistory, setShowHistory] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
   const multiResultsRef = useRef<HTMLDivElement>(null);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     setHistory(getHistory());
@@ -168,7 +170,19 @@ export default function Home() {
             <h1 className="text-4xl font-bold flex-1">
               Détecteur de Cycles Mathématiques
             </h1>
-            <div className="flex-1 flex justify-end">
+            <div className="flex-1 flex justify-end gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={toggleTheme}
+                data-testid="button-toggle-theme"
+              >
+                {theme === "light" ? (
+                  <Moon className="h-5 w-5" />
+                ) : (
+                  <Sun className="h-5 w-5" />
+                )}
+              </Button>
               <Button
                 variant="outline"
                 size="icon"
