@@ -47,8 +47,16 @@ export default function Game() {
   const [streak, setStreak] = useState(0);
   const { theme, toggleTheme } = useTheme();
 
+  // Pré-calculer les nombres avec cycles courts vs longs (50/50)
+  const shortCycleNumbers = [1, 7, 10, 13, 19, 23, 28, 31, 32, 44, 49, 68, 70, 79, 82, 86, 91, 94, 97, 100, 103, 109, 129, 130, 133, 139, 167, 176, 188, 190, 192, 193, 203, 208, 213, 215, 216, 228, 231, 232, 235, 242, 250, 254, 259, 271, 274, 284, 286, 293];
+  const longCycleNumbers = [2, 3, 4, 5, 6, 8, 9, 11, 12, 14, 15, 16, 17, 18, 20, 21, 22, 24, 25, 26, 27, 29, 30, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 45, 46, 47, 48, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61];
+
   const generateNewGame = () => {
-    const num = Math.floor(Math.random() * 999) + 1;
+    // Choisir aléatoirement entre court et long (50/50)
+    const isShortCycle = Math.random() < 0.5;
+    const numberList = isShortCycle ? shortCycleNumbers : longCycleNumbers;
+    const num = numberList[Math.floor(Math.random() * numberList.length)];
+    
     const result = calculateSquareSum(num);
     setCurrentNumber(num);
     setActualCycleLength(result.cycleLength);
