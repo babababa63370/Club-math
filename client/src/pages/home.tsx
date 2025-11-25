@@ -18,6 +18,28 @@ import jsPDF from "jspdf";
 import type { CalculationResult, HistoryEntry, MultiCalculationResult } from "@shared/schema";
 
 export default function Home() {
+  // Add animation styles
+  React.useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      .animate-slide-in {
+        animation: slideIn 0.3s ease-out;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => style.remove();
+  }, []);
+
   const [inputValue, setInputValue] = useState("");
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [multiResults, setMultiResults] = useState<MultiCalculationResult[]>([]);
@@ -32,6 +54,7 @@ export default function Home() {
   const [showInverse, setShowInverse] = useState(false);
   const [inverseTarget, setInverseTarget] = useState("");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showDescription, setShowDescription] = useState(false);
   const [totalVisits, setTotalVisits] = useState(0);
   const [currentVisitors, setCurrentVisitors] = useState(1);
   const [totalCalculations, setTotalCalculations] = useState(0);
@@ -258,16 +281,7 @@ export default function Home() {
       <div className="max-w-4xl mx-auto px-6 py-12">
         <header className="text-center py-8 mb-8">
           <div className="flex items-center justify-between mb-4">
-            <div className="flex-1 flex md:hidden">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setShowMobileMenu(!showMobileMenu)}
-                data-testid="button-mobile-menu"
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-            </div>
+            <div className="flex-1" />
             <h1 className="text-4xl font-bold flex-1">
               Détecteur de Cycles Mathématiques
             </h1>
@@ -318,90 +332,108 @@ export default function Home() {
               >
                 <History className="h-5 w-5" />
               </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                data-testid="button-mobile-menu"
+                className="md:hidden"
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
             </div>
           </div>
-          <div className="flex justify-center items-center gap-2 max-w-2xl mx-auto">
-            <p className="text-lg text-muted-foreground">
-              Entrez un nombre pour découvrir la suite formée par la somme des carrés de ses chiffres, et observez le cycle qui se forme
-            </p>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setShowInfo(true)}
-              data-testid="button-info-header"
+          <div className="max-w-2xl mx-auto">
+            <button
+              onClick={() => setShowDescription(!showDescription)}
+              className="w-full text-left"
             >
-              <Info className="h-5 w-5" />
-            </Button>
+              <Card className="p-4 hover-elevate cursor-pointer">
+                <p className="text-lg text-muted-foreground">
+                  Entrez un nombre pour découvrir la suite formée par la somme des carrés de ses chiffres, et observez le cycle qui se forme
+                </p>
+              </Card>
+            </button>
           </div>
         </header>
 
         {showMobileMenu && (
-          <div className="bg-card border-b mb-8 p-4 rounded-lg md:hidden" data-testid="mobile-menu">
-            <div className="space-y-3">
-              <button
-                onClick={() => {
-                  setShowFavorites(!showFavorites);
-                  setShowMobileMenu(false);
-                }}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                <Star className={`h-5 w-5 ${showFavorites ? "fill-yellow-500" : ""}`} />
-                <span>Favoris</span>
-              </button>
-              
-              <button
-                onClick={() => {
-                  setShowHistory(!showHistory);
-                  setShowMobileMenu(false);
-                }}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                <History className="h-5 w-5" />
-                <span>Historique</span>
-              </button>
-              
-              <button
-                onClick={() => {
-                  toggleTheme();
-                  setShowMobileMenu(false);
-                }}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                {theme === "light" ? (
-                  <>
-                    <Moon className="h-5 w-5" />
-                    <span>Mode Sombre</span>
-                  </>
-                ) : (
-                  <>
-                    <Sun className="h-5 w-5" />
-                    <span>Mode Clair</span>
-                  </>
-                )}
-              </button>
-              
-              <button
-                onClick={() => {
-                  setShowColorPicker(true);
-                  setShowMobileMenu(false);
-                }}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                <div className="h-5 w-5 rounded-full bg-primary" />
-                <span>Couleurs</span>
-              </button>
-
-              <Link href="/about">
+          <>
+            <div 
+              className="fixed inset-0 bg-black/20 z-40 md:hidden" 
+              onClick={() => setShowMobileMenu(false)}
+              data-testid="mobile-menu-backdrop"
+            />
+            <div 
+              className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 md:hidden animate-slide-in"
+              data-testid="mobile-menu"
+            >
+              <div className="p-4 space-y-3">
                 <button
-                  onClick={() => setShowMobileMenu(false)}
+                  onClick={() => {
+                    setShowFavorites(!showFavorites);
+                    setShowMobileMenu(false);
+                  }}
                   className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
                 >
-                  <HelpCircle className="h-5 w-5" />
-                  <span>À Propos</span>
+                  <Star className={`h-5 w-5 ${showFavorites ? "fill-yellow-500" : ""}`} />
+                  <span>Favoris</span>
                 </button>
-              </Link>
+                
+                <button
+                  onClick={() => {
+                    setShowHistory(!showHistory);
+                    setShowMobileMenu(false);
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  <History className="h-5 w-5" />
+                  <span>Historique</span>
+                </button>
+                
+                <button
+                  onClick={() => {
+                    toggleTheme();
+                    setShowMobileMenu(false);
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  {theme === "light" ? (
+                    <>
+                      <Moon className="h-5 w-5" />
+                      <span>Mode Sombre</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sun className="h-5 w-5" />
+                      <span>Mode Clair</span>
+                    </>
+                  )}
+                </button>
+                
+                <button
+                  onClick={() => {
+                    setShowColorPicker(true);
+                    setShowMobileMenu(false);
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  <div className="h-5 w-5 rounded-full bg-primary" />
+                  <span>Couleurs</span>
+                </button>
+
+                <Link href="/about">
+                  <button
+                    onClick={() => setShowMobileMenu(false)}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+                  >
+                    <HelpCircle className="h-5 w-5" />
+                    <span>À Propos</span>
+                  </button>
+                </Link>
+              </div>
             </div>
-          </div>
+          </>
         )}
 
         <div className="max-w-md mx-auto mb-16">
