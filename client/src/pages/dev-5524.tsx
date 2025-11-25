@@ -22,7 +22,7 @@ export default function Dev5524() {
 
           <div className="space-y-8">
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold">Algorithme Principal: Décomposer et Calculer</h2>
+              <h2 className="text-2xl font-bold">TypeScript: Algorithme Principal</h2>
               <div className="bg-card border rounded-lg p-6 font-mono text-sm overflow-x-auto">
                 <pre>{`export function calculateSquareSum(num: number): CalculationResult {
   const steps: CalculationStep[] = [];
@@ -30,20 +30,13 @@ export default function Dev5524() {
   let current = num;
   let stepNumber = 0;
 
-  // Boucle jusqu'à trouver un cycle
   while (!seen.has(current)) {
     seen.set(current, stepNumber);
     
-    // Étape 1: Décomposer en chiffres
     const digits = current.toString().split('').map(Number);
-    
-    // Étape 2: Élever chaque chiffre au carré
     const squaredDigits = digits.map(d => d * d);
-    
-    // Étape 3: Additionner les résultats
     const sum = squaredDigits.reduce((acc, val) => acc + val, 0);
     
-    // Créer le calcul lisible
     const calculation = digits
       .map((d, i) => \`\${d}²\`)
       .join(' + ') + \` = \${digits.map((d, i) => squaredDigits[i]).join(' + ')} = \${sum}\`;
@@ -61,17 +54,12 @@ export default function Dev5524() {
     current = sum;
     stepNumber++;
     
-    // Sécurité: limite à 1000 itérations
-    if (stepNumber > 1000) {
-      break;
-    }
+    if (stepNumber > 1000) break;
   }
 
-  // Identifier le cycle
   const cycleStartIndex = seen.has(current) ? seen.get(current)! : steps.length - 1;
   const cycleLength = stepNumber - cycleStartIndex;
 
-  // Marquer les étapes dans le cycle
   for (let i = cycleStartIndex; i < steps.length; i++) {
     steps[i].isInCycle = true;
   }
@@ -80,37 +68,22 @@ export default function Dev5524() {
     steps[cycleStartIndex].isCycleStart = true;
   }
 
-  return {
-    steps,
-    cycleStartIndex,
-    cycleLength,
-  };
+  return { steps, cycleStartIndex, cycleLength };
 }`}</pre>
-              </div>
-              <div className="bg-primary/10 p-4 rounded-lg space-y-2">
-                <p className="text-sm"><strong>Exemple:</strong> 19</p>
-                <p className="text-sm">• Chiffres: 1, 9</p>
-                <p className="text-sm">• Carrés: 1² = 1, 9² = 81</p>
-                <p className="text-sm">• Somme: 1 + 81 = 82</p>
               </div>
             </div>
 
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold">Algorithme Inverse: Trouver par Cycle</h2>
+              <h2 className="text-2xl font-bold">TypeScript: Algorithme Inverse</h2>
               <div className="bg-card border rounded-lg p-6 font-mono text-sm overflow-x-auto">
-                <pre>{`// Chercher tous les nombres (1 à 100) qui ont une longueur de cycle spécifique
-export function findNumbersWithCycle(
+                <pre>{`export function findNumbersWithCycle(
   targetCycle: number, 
   maxSearch: number = 100
 ): number[] {
   const matching: number[] = [];
   
-  // Tester chaque nombre
   for (let i = 1; i <= maxSearch; i++) {
-    // Utiliser l'algorithme principal
     const result = calculateSquareSum(i);
-    
-    // Si la longueur du cycle correspond
     if (result.cycleLength === targetCycle) {
       matching.push(i);
     }
@@ -119,30 +92,116 @@ export function findNumbersWithCycle(
   return matching;
 }
 
-// Exemple d'utilisation:
-// findNumbersWithCycle(1) retourne [1, 7, 10, 13, 19, 23, ...]
-// Ces nombres sont appelés "nombres heureux" (happy numbers)
-// car leur cycle contient toujours 1
-
-// Exemple d'utilisation:
-// findNumbersWithCycle(8) retourne [2, 5, 8, 14, 15, ...]
-// Ces nombres se piègent dans le cycle: 4→16→37→58→89→145→42→20→4`}</pre>
+// findNumbersWithCycle(1) → nombres heureux
+// findNumbersWithCycle(8) → cycle courant`}</pre>
               </div>
-              <div className="bg-primary/10 p-4 rounded-lg space-y-2">
-                <p className="text-sm"><strong>Résultats intéressants:</strong></p>
-                <p className="text-sm">• Cycle de 1: Nombres heureux (atteignent 1)</p>
-                <p className="text-sm">• Cycle de 8: Le cycle le plus courant pour les nombres "tristes"</p>
-                <p className="text-sm">• Le cycle principal: 4→16→37→58→89→145→42→20→4</p>
+            </div>
+
+            <div className="border-t pt-8 space-y-4">
+              <h2 className="text-2xl font-bold">Python: Algorithme Principal</h2>
+              <p className="text-sm text-muted-foreground">Prêt à copier-coller :</p>
+              <div className="bg-card border rounded-lg p-6 font-mono text-sm overflow-x-auto">
+                <pre>{`def calculate_square_sum(num):
+    """Décompose un nombre en chiffres, élève au carré, additionne, répète."""
+    steps = []
+    seen = {}
+    current = num
+    step_number = 0
+    
+    while current not in seen:
+        seen[current] = step_number
+        
+        # Décomposer en chiffres
+        digits = [int(d) for d in str(current)]
+        
+        # Élever au carré
+        squared_digits = [d * d for d in digits]
+        
+        # Additionner
+        sum_result = sum(squared_digits)
+        
+        # Calcul lisible
+        calculation = ' + '.join(f'{d}²' for d in digits) + \
+                     f' = {" + ".join(str(s) for s in squared_digits)} = {sum_result}'
+        
+        steps.append({
+            'step_number': step_number,
+            'original_number': current,
+            'digits': digits,
+            'calculation': calculation,
+            'result': sum_result,
+            'is_in_cycle': False,
+            'is_cycle_start': False,
+        })
+        
+        current = sum_result
+        step_number += 1
+        
+        if step_number > 1000:
+            break
+    
+    cycle_start_index = seen.get(current, len(steps) - 1)
+    cycle_length = step_number - cycle_start_index
+    
+    for i in range(cycle_start_index, len(steps)):
+        steps[i]['is_in_cycle'] = True
+    
+    if cycle_start_index < len(steps):
+        steps[cycle_start_index]['is_cycle_start'] = True
+    
+    return {
+        'steps': steps,
+        'cycle_start_index': cycle_start_index,
+        'cycle_length': cycle_length,
+    }
+
+
+# Exemple d'utilisation:
+if __name__ == '__main__':
+    result = calculate_square_sum(19)
+    print(f"Nombre: 19")
+    print(f"Étapes: {len(result['steps'])}")
+    print(f"Cycle: {result['cycle_length']}")
+    
+    for step in result['steps']:
+        print(f"Étape {step['step_number']}: {step['calculation']}")`}</pre>
               </div>
             </div>
 
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold">Complexité et Performance</h2>
-              <div className="bg-card border rounded-lg p-6 space-y-3">
-                <p className="text-sm"><strong>Temps: O(k)</strong> où k est le nombre d'étapes avant le cycle (généralement &lt; 20)</p>
-                <p className="text-sm"><strong>Espace: O(k)</strong> pour stocker les nombres vus</p>
-                <p className="text-sm"><strong>Cas limite:</strong> Limitée à 1000 itérations pour éviter les infinis théoriques</p>
+              <h2 className="text-2xl font-bold">Python: Algorithme Inverse</h2>
+              <p className="text-sm text-muted-foreground">Chercher par longueur de cycle :</p>
+              <div className="bg-card border rounded-lg p-6 font-mono text-sm overflow-x-auto">
+                <pre>{`def find_numbers_with_cycle(target_cycle, max_search=100):
+    """Trouve tous les nombres avec une longueur de cycle spécifique."""
+    matching = []
+    
+    for i in range(1, max_search + 1):
+        result = calculate_square_sum(i)
+        if result['cycle_length'] == target_cycle:
+            matching.append(i)
+    
+    return matching
+
+
+# Exemples:
+if __name__ == '__main__':
+    happy = find_numbers_with_cycle(1, 50)
+    print(f"Nombres heureux (cycle=1): {happy}")
+    
+    cycle_8 = find_numbers_with_cycle(8, 50)
+    print(f"Nombres avec cycle=8: {cycle_8}")
+    
+    cycle_5 = find_numbers_with_cycle(5, 50)
+    print(f"Nombres avec cycle=5: {cycle_5}")`}</pre>
               </div>
+            </div>
+
+            <div className="bg-primary/10 p-6 rounded-lg space-y-3">
+              <h3 className="font-bold">Notes importantes:</h3>
+              <p className="text-sm">• Code Python prêt à copier-coller directement</p>
+              <p className="text-sm">• Nombres heureux (cycle=1): 1, 7, 10, 13, 19, 23, 28, 31, ...</p>
+              <p className="text-sm">• Cycle principal: 4 → 16 → 37 → 58 → 89 → 145 → 42 → 20 → 4</p>
             </div>
           </div>
         </div>
