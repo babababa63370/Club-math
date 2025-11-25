@@ -56,9 +56,16 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   }, []);
 
   const applyTheme = (newTheme: "light" | "dark", palette: ColorPalette = colorPalette) => {
-    // Add transition class
-    document.documentElement.classList.add("theme-transitioning");
+    // Add animation class based on theme direction
+    if (newTheme === "dark") {
+      document.documentElement.classList.add("theme-transitioning-to-dark");
+      document.documentElement.classList.remove("theme-transitioning-to-light");
+    } else {
+      document.documentElement.classList.add("theme-transitioning-to-light");
+      document.documentElement.classList.remove("theme-transitioning-to-dark");
+    }
     
+    // Update theme class
     if (newTheme === "dark") {
       document.documentElement.classList.add("dark");
     } else {
@@ -73,9 +80,10 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     localStorage.setItem("theme", newTheme);
     localStorage.setItem("color-palette", palette);
     
-    // Remove transition class after animation completes
+    // Remove animation class after animation completes
     setTimeout(() => {
-      document.documentElement.classList.remove("theme-transitioning");
+      document.documentElement.classList.remove("theme-transitioning-to-dark");
+      document.documentElement.classList.remove("theme-transitioning-to-light");
     }, 1500);
   };
 

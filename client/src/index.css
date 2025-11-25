@@ -3,19 +3,50 @@
 @tailwind utilities;
 
 /* Theme transition animation */
+@keyframes themeTransitionToLight {
+  0% {
+    background-color: hsl(0 0% 9%);
+    color: hsl(0 0% 98%);
+  }
+  50% {
+    background-color: hsl(0 0% 50%);
+    color: hsl(0 0% 50%);
+  }
+  100% {
+    background-color: hsl(0 0% 100%);
+    color: hsl(0 0% 9%);
+  }
+}
+
+@keyframes themeTransitionToDark {
+  0% {
+    background-color: hsl(0 0% 100%);
+    color: hsl(0 0% 9%);
+  }
+  50% {
+    background-color: hsl(0 0% 50%);
+    color: hsl(0 0% 50%);
+  }
+  100% {
+    background-color: hsl(0 0% 9%);
+    color: hsl(0 0% 98%);
+  }
+}
+
 :root {
   color-scheme: light;
-  transition: background-color 1.5s ease, color 1.5s ease;
 }
 
 :root.dark {
   color-scheme: dark;
 }
 
-:root.theme-transitioning,
-:root.dark.theme-transitioning {
-  transition: background-color 1.5s ease, color 1.5s ease, 
-              border-color 1.5s ease;
+:root.theme-transitioning-to-light {
+  animation: themeTransitionToLight 1.5s ease forwards;
+}
+
+:root.theme-transitioning-to-dark {
+  animation: themeTransitionToDark 1.5s ease forwards;
 }
 
 /* LIGHT MODE */
