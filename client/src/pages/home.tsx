@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun, X, Star, Share2, Maximize2, HelpCircle } from "lucide-react";
+import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun, X, Star, Share2, Maximize2, HelpCircle, Menu } from "lucide-react";
 import { Link } from "wouter";
 import { useTheme, type ColorPalette } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
@@ -31,6 +31,7 @@ export default function Home() {
   const [showGlobalStats, setShowGlobalStats] = useState(false);
   const [showInverse, setShowInverse] = useState(false);
   const [inverseTarget, setInverseTarget] = useState("");
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [totalVisits, setTotalVisits] = useState(0);
   const [currentVisitors, setCurrentVisitors] = useState(1);
   const [totalCalculations, setTotalCalculations] = useState(0);
@@ -257,7 +258,16 @@ export default function Home() {
       <div className="max-w-4xl mx-auto px-6 py-12">
         <header className="text-center py-8 mb-8">
           <div className="flex items-center justify-between mb-4">
-            <div className="flex-1" />
+            <div className="flex-1 flex md:hidden">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                data-testid="button-mobile-menu"
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+            </div>
             <h1 className="text-4xl font-bold flex-1">
               Détecteur de Cycles Mathématiques
             </h1>
@@ -310,10 +320,89 @@ export default function Home() {
               </Button>
             </div>
           </div>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Entrez un nombre pour découvrir la suite formée par la somme des carrés de ses chiffres, et observez le cycle qui se forme
-          </p>
+          <div className="flex justify-center items-center gap-2 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground">
+              Entrez un nombre pour découvrir la suite formée par la somme des carrés de ses chiffres, et observez le cycle qui se forme
+            </p>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setShowInfo(true)}
+              data-testid="button-info-header"
+            >
+              <Info className="h-5 w-5" />
+            </Button>
+          </div>
         </header>
+
+        {showMobileMenu && (
+          <div className="bg-card border-b mb-8 p-4 rounded-lg md:hidden" data-testid="mobile-menu">
+            <div className="space-y-3">
+              <button
+                onClick={() => {
+                  setShowFavorites(!showFavorites);
+                  setShowMobileMenu(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                <Star className={`h-5 w-5 ${showFavorites ? "fill-yellow-500" : ""}`} />
+                <span>Favoris</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  setShowHistory(!showHistory);
+                  setShowMobileMenu(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                <History className="h-5 w-5" />
+                <span>Historique</span>
+              </button>
+              
+              <button
+                onClick={() => {
+                  toggleTheme();
+                  setShowMobileMenu(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                {theme === "light" ? (
+                  <>
+                    <Moon className="h-5 w-5" />
+                    <span>Mode Sombre</span>
+                  </>
+                ) : (
+                  <>
+                    <Sun className="h-5 w-5" />
+                    <span>Mode Clair</span>
+                  </>
+                )}
+              </button>
+              
+              <button
+                onClick={() => {
+                  setShowColorPicker(true);
+                  setShowMobileMenu(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                <div className="h-5 w-5 rounded-full bg-primary" />
+                <span>Couleurs</span>
+              </button>
+
+              <Link href="/about">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  <HelpCircle className="h-5 w-5" />
+                  <span>À Propos</span>
+                </button>
+              </Link>
+            </div>
+          </div>
+        )}
 
         <div className="max-w-md mx-auto mb-16">
           <div className="flex flex-col gap-4">
@@ -351,17 +440,6 @@ export default function Home() {
               >
                 <span className="md:hidden">Chercher</span>
                 <RefreshCw className="h-5 w-5 hidden md:inline" />
-              </Button>
-              
-              <Button
-                onClick={() => setShowInfo(true)}
-                variant="outline"
-                className="h-14 w-full md:w-14 md:flex md:items-center md:justify-center"
-                data-testid="button-info-mobile"
-                title="Statistiques"
-              >
-                <span className="md:hidden">Infos</span>
-                <Info className="h-5 w-5 hidden md:inline" />
               </Button>
               
               {(result || multiResults.length > 0) && (
