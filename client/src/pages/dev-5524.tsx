@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ArrowLeft, Menu } from "lucide-react";
+// @ts-ignore
 import SyntaxHighlighter from "react-syntax-highlighter";
+// @ts-ignore
 import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 export default function Dev5524() {
