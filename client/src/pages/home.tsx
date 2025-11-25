@@ -431,6 +431,28 @@ export default function Home() {
                     <span>À Propos</span>
                   </button>
                 </Link>
+
+                <div className="border-t my-2" />
+
+                <Link href="/game">
+                  <button
+                    onClick={() => setShowMobileMenu(false)}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+                  >
+                    <span className="text-lg">🎮</span>
+                    <span>Jeu du Cycle</span>
+                  </button>
+                </Link>
+
+                <Link href="/fake">
+                  <button
+                    onClick={() => setShowMobileMenu(false)}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+                  >
+                    <span className="text-lg">🎭</span>
+                    <span>Mode Fake</span>
+                  </button>
+                </Link>
               </div>
             </div>
           </>

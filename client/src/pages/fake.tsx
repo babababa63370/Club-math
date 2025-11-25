@@ -143,10 +143,25 @@ export default function Fake() {
             <Link href="/">
               <button
                 onClick={() => setShowMobileMenu(false)}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
               >
-                <ArrowLeft className="h-5 w-5" />
-                <span>Accueil</span>
+                Calculateur
+              </button>
+            </Link>
+            <Link href="/about">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                À propos
+              </button>
+            </Link>
+            <Link href="/game">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                Jeu
               </button>
             </Link>
           </div>

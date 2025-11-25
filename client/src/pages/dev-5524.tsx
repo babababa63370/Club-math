@@ -214,7 +214,34 @@ if __name__ == '__main__':
                 className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
               >
                 <ArrowLeft className="h-5 w-5" />
-                <span>Retour</span>
+                <span>Calculateur</span>
+              </button>
+            </Link>
+
+            <Link href="/about">
+              <button
+                onClick={() => setShowMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                À propos
+              </button>
+            </Link>
+
+            <Link href="/game">
+              <button
+                onClick={() => setShowMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                🎮 Jeu du Cycle
+              </button>
+            </Link>
+
+            <Link href="/fake">
+              <button
+                onClick={() => setShowMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                🎭 Mode Fake
               </button>
             </Link>
           </div>

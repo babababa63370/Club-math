@@ -8,6 +8,7 @@ import Home from "@/pages/home";
 import About from "@/pages/about";
 import Dev5524 from "@/pages/dev-5524";
 import Fake from "@/pages/fake";
+import Game from "@/pages/game";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -17,6 +18,7 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/dev-5524" component={Dev5524} />
       <Route path="/fake" component={Fake} />
+      <Route path="/game" component={Game} />
       <Route component={NotFound} />
     </Switch>
   );
