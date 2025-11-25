@@ -11,6 +11,7 @@ import Fake from "@/pages/fake";
 import Game from "@/pages/game";
 import HallOfFame from "@/pages/hall-of-fame";
 import Art from "@/pages/art";
+import Zen from "@/pages/zen";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -23,6 +24,7 @@ function Router() {
       <Route path="/game" component={Game} />
       <Route path="/hall-of-fame" component={HallOfFame} />
       <Route path="/art" component={Art} />
+      <Route path="/zen" component={Zen} />
       <Route component={NotFound} />
     </Switch>
   );

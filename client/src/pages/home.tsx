@@ -466,6 +466,16 @@ export default function Home() {
                   </button>
                 </Link>
 
+                <Link href="/zen">
+                  <button
+                    onClick={() => setShowMobileMenu(false)}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+                  >
+                    <span className="text-lg">🧘</span>
+                    <span>Mode Zen</span>
+                  </button>
+                </Link>
+
                 <Link href="/fake">
                   <button
                     onClick={() => setShowMobileMenu(false)}
