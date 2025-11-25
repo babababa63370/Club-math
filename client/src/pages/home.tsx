@@ -267,16 +267,9 @@ export default function Home() {
                 size="icon"
                 onClick={() => setShowFavorites(!showFavorites)}
                 data-testid="button-toggle-favorites"
+                className="hidden md:inline-flex"
               >
                 <Star className={`h-5 w-5 ${showFavorites ? "fill-yellow-500" : ""}`} />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setShowInfo(true)}
-                data-testid="button-info"
-              >
-                <Info className="h-5 w-5" />
               </Button>
               <Button
                 variant="outline"
@@ -288,6 +281,7 @@ export default function Home() {
                 }}
                 data-testid="button-toggle-theme"
                 title="Double-clic pour les couleurs"
+                className="hidden md:inline-flex"
               >
                 {theme === "light" ? (
                   <Moon className="h-5 w-5" />
@@ -300,6 +294,7 @@ export default function Home() {
                   variant="outline"
                   size="icon"
                   data-testid="button-about"
+                  className="hidden md:inline-flex"
                 >
                   <HelpCircle className="h-5 w-5" />
                 </Button>
@@ -309,6 +304,7 @@ export default function Home() {
                 size="icon"
                 onClick={() => setShowHistory(!showHistory)}
                 data-testid="button-toggle-history"
+                className="hidden md:inline-flex"
               >
                 <History className="h-5 w-5" />
               </Button>
@@ -337,7 +333,7 @@ export default function Home() {
               </p>
             )}
             
-            <div className="flex gap-3">
+            <div className="flex flex-col md:flex-row gap-3">
               <Button
                 onClick={handleCalculate}
                 className="flex-1 h-14 text-lg"
@@ -349,23 +345,34 @@ export default function Home() {
               <Button
                 onClick={() => setShowInverse(true)}
                 variant="outline"
-                size="icon"
-                className="h-14 w-14"
+                className="h-14 w-full md:w-14 md:flex md:items-center md:justify-center"
                 data-testid="button-inverse"
                 title="Trouver nombres par cycle"
               >
-                <RefreshCw className="h-5 w-5" />
+                <span className="md:hidden">Chercher</span>
+                <RefreshCw className="h-5 w-5 hidden md:inline" />
+              </Button>
+              
+              <Button
+                onClick={() => setShowInfo(true)}
+                variant="outline"
+                className="h-14 w-full md:w-14 md:flex md:items-center md:justify-center"
+                data-testid="button-info-mobile"
+                title="Statistiques"
+              >
+                <span className="md:hidden">Infos</span>
+                <Info className="h-5 w-5 hidden md:inline" />
               </Button>
               
               {(result || multiResults.length > 0) && (
                 <Button
                   onClick={handleReset}
                   variant="outline"
-                  size="icon"
-                  className="h-14 w-14"
+                  className="h-14 w-full md:w-14 md:flex md:items-center md:justify-center"
                   data-testid="button-reset"
                 >
-                  <X className="h-5 w-5" />
+                  <span className="md:hidden">Réinitialiser</span>
+                  <X className="h-5 w-5 hidden md:inline" />
                 </Button>
               )}
             </div>
