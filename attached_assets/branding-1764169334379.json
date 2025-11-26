@@ -1,0 +1,93 @@
+{
+  "colorScheme": "dark",
+  "fonts": [
+    {
+      "family": "IBM Plex Sans",
+      "role": "body"
+    },
+    {
+      "family": "ABC Diatype",
+      "role": "display"
+    }
+  ],
+  "colors": {
+    "primary": "#2B3E48",
+    "accent": "#EC4E02",
+    "background": "#1A1C25",
+    "textPrimary": "#1A1C25",
+    "link": "#EC4E02"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "IBM Plex Sans",
+      "heading": "ABC Diatype"
+    },
+    "fontStacks": {
+      "heading": [
+        "IBM Plex Sans",
+        "sans-serif"
+      ],
+      "body": [
+        "IBM Plex Sans",
+        "sans-serif"
+      ],
+      "paragraph": [
+        "IBM Plex Sans",
+        "sans-serif"
+      ]
+    },
+    "fontSizes": {
+      "h1": "14px",
+      "h2": "14px",
+      "body": "14px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "borderRadius": "0px"
+  },
+  "components": {
+    "input": {
+      "borderColor": "#CCCCCC",
+      "borderRadius": "0px"
+    }
+  },
+  "images": {
+    "logo": "File saved at: attached_assets/logo.svg",
+    "favicon": "File saved at: attached_assets/favicon.png",
+    "ogImage": "https://icons-util.replit.app/bash.svg"
+  },
+  "__framework_hints": [],
+  "__llm_logo_reasoning": {
+    "selectedIndex": 0,
+    "reasoning": "The logo in the header matches the brand name 'replit' and is visible, making it the most suitable choice as the brand logo.",
+    "confidence": 0.9
+  },
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": -1,
+      "text": "N/A",
+      "reasoning": "The only button present has a dark background (#1A1C25), which does not qualify as a vibrant or action-oriented primary CTA. It lacks the characteristics of a primary button, such as a bright color or strong action-oriented text."
+    },
+    "secondary": {
+      "index": -1,
+      "text": "N/A",
+      "reasoning": "There are no other buttons available to classify as secondary, and the only button present does not meet the criteria for a secondary button either."
+    },
+    "confidence": 0.5
+  },
+  "personality": {
+    "tone": "modern",
+    "energy": "medium",
+    "targetAudience": "developers and tech enthusiasts"
+  },
+  "designSystem": {
+    "framework": "unknown",
+    "componentLibrary": null
+  },
+  "confidence": {
+    "buttons": 0.5,
+    "colors": 0.8,
+    "overall": 0.65
+  }
+}
