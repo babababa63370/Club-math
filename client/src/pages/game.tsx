@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { Menu, RotateCcw, Trophy } from "lucide-react";
+import { RotateCcw, Trophy } from "lucide-react";
 import { Link } from "wouter";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { NavBar } from "@/components/nav-bar";
 import { calculateSquareSum } from "@/lib/cycleDetector";
 
 export default function Game() {
