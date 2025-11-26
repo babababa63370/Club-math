@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { RefreshCw, X, Menu as MenuIcon, Star, History, Moon, Sun, HelpCircle } from "lucide-react";
+import { RefreshCw, X, Menu as MenuIcon, Moon, Sun, HelpCircle } from "lucide-react";
 import { Link } from "wouter";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
@@ -38,7 +38,7 @@ export default function Art() {
 
   const [artWorks, setArtWorks] = useState<ArtData[]>([]);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, setShowColorPicker } = useTheme();
 
   const colors = [
     "#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A", "#98D8C8",
@@ -195,6 +195,17 @@ export default function Art() {
                     Mode Clair
                   </>
                 )}
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowColorPicker(true);
+                  setShowMobileMenu(false);
+                }}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                <div className="h-5 w-5 rounded-full bg-primary inline mr-2" />
+                Couleurs
               </button>
 
               <Link href="/">

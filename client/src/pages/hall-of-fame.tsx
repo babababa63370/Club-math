@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { X, Menu as MenuIcon, Moon, Sun, HelpCircle } from "lucide-react";
 import { Link } from "wouter";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
@@ -36,7 +37,8 @@ export default function HallOfFame() {
   }, []);
 
   const [records, setRecords] = useState<Record[]>([]);
-  const { theme, toggleTheme } = useTheme();
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const { theme, toggleTheme, setShowColorPicker } = useTheme();
 
   useEffect(() => {
     const calculateRecords = () => {
@@ -118,6 +120,14 @@ export default function HallOfFame() {
               >
                 {theme === "light" ? "🌙" : "☀️"}
               </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                data-testid="button-mobile-menu"
+              >
+                {showMobileMenu ? <X className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
+              </Button>
             </div>
           </div>
           <div className="max-w-2xl mx-auto">
@@ -128,6 +138,119 @@ export default function HallOfFame() {
             </Card>
           </div>
         </header>
+
+        {showMobileMenu && (
+          <>
+            <div 
+              className="fixed inset-0 bg-black/20 z-40" 
+              onClick={() => setShowMobileMenu(false)}
+            />
+            <div 
+              className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 animate-slide-in p-4 space-y-3 overflow-y-auto"
+            >
+              <button
+                onClick={() => {
+                  toggleTheme();
+                  setShowMobileMenu(false);
+                }}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                {theme === "light" ? (
+                  <>
+                    <Moon className="h-5 w-5 inline mr-2" />
+                    Mode Sombre
+                  </>
+                ) : (
+                  <>
+                    <Sun className="h-5 w-5 inline mr-2" />
+                    Mode Clair
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowColorPicker(true);
+                  setShowMobileMenu(false);
+                }}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                <div className="h-5 w-5 rounded-full bg-primary inline mr-2" />
+                Couleurs
+              </button>
+
+              <Link href="/">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  ← Accueil
+                </button>
+              </Link>
+
+              <Link href="/sierpinski">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  Triangle de Sierpinski →
+                </button>
+              </Link>
+
+              <div className="border-t border-border my-2" />
+
+              <Link href="/about">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  <HelpCircle className="h-5 w-5 inline mr-2" />
+                  À Propos
+                </button>
+              </Link>
+
+              <div className="border-t border-border my-2" />
+
+              <p className="text-xs text-muted-foreground px-2 font-semibold">JEUX & EXPLORATIONS</p>
+
+              <Link href="/game">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🎮 Jeu du Cycle
+                </button>
+              </Link>
+
+              <Link href="/art">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🎨 Générateur Art
+                </button>
+              </Link>
+
+              <Link href="/zen">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🧘 Mode Zen
+                </button>
+              </Link>
+
+              <Link href="/fake">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🤔 Mode Fake
+                </button>
+              </Link>
+            </div>
+          </>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {records.map((record, idx) => (

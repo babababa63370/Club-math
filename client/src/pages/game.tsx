@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { RotateCcw, Trophy } from "lucide-react";
+import { RotateCcw, Trophy, X, Menu as MenuIcon, Moon, Sun, HelpCircle } from "lucide-react";
 import { Link } from "wouter";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
@@ -45,7 +45,8 @@ export default function Game() {
   const [isCorrect, setIsCorrect] = useState(false);
   const [totalGames, setTotalGames] = useState(0);
   const [streak, setStreak] = useState(0);
-  const { theme, toggleTheme } = useTheme();
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const { theme, toggleTheme, setShowColorPicker } = useTheme();
 
   const shortCycleNumbers = [1, 7, 10, 13, 19, 23, 28, 31, 32, 44, 49, 68, 70, 79, 82, 86, 91, 94, 97, 100, 103, 109, 129, 130, 133, 139, 167, 176, 188, 190, 192, 193, 203, 208, 213, 215, 216, 228, 231, 232, 235, 242, 250, 254, 259, 271, 274, 284, 286, 293];
   const longCycleNumbers = [2, 3, 4, 5, 6, 8, 9, 11, 12, 14, 15, 16, 17, 18, 20, 21, 22, 24, 25, 26, 27, 29, 30, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 45, 46, 47, 48, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61];
@@ -116,6 +117,14 @@ export default function Game() {
               >
                 {theme === "light" ? "🌙" : "☀️"}
               </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                data-testid="button-mobile-menu"
+              >
+                {showMobileMenu ? <X className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
+              </Button>
             </div>
           </div>
           <div className="max-w-2xl mx-auto">
@@ -126,6 +135,119 @@ export default function Game() {
             </Card>
           </div>
         </header>
+
+        {showMobileMenu && (
+          <>
+            <div 
+              className="fixed inset-0 bg-black/20 z-40" 
+              onClick={() => setShowMobileMenu(false)}
+            />
+            <div 
+              className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 animate-slide-in p-4 space-y-3 overflow-y-auto"
+            >
+              <button
+                onClick={() => {
+                  toggleTheme();
+                  setShowMobileMenu(false);
+                }}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                {theme === "light" ? (
+                  <>
+                    <Moon className="h-5 w-5 inline mr-2" />
+                    Mode Sombre
+                  </>
+                ) : (
+                  <>
+                    <Sun className="h-5 w-5 inline mr-2" />
+                    Mode Clair
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowColorPicker(true);
+                  setShowMobileMenu(false);
+                }}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                <div className="h-5 w-5 rounded-full bg-primary inline mr-2" />
+                Couleurs
+              </button>
+
+              <Link href="/">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  ← Accueil
+                </button>
+              </Link>
+
+              <Link href="/sierpinski">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  Triangle de Sierpinski →
+                </button>
+              </Link>
+
+              <div className="border-t border-border my-2" />
+
+              <Link href="/about">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  <HelpCircle className="h-5 w-5 inline mr-2" />
+                  À Propos
+                </button>
+              </Link>
+
+              <div className="border-t border-border my-2" />
+
+              <p className="text-xs text-muted-foreground px-2 font-semibold">JEUX & EXPLORATIONS</p>
+
+              <Link href="/hall-of-fame">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🏆 Hall of Fame
+                </button>
+              </Link>
+
+              <Link href="/art">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🎨 Générateur Art
+                </button>
+              </Link>
+
+              <Link href="/zen">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🧘 Mode Zen
+                </button>
+              </Link>
+
+              <Link href="/fake">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🤔 Mode Fake
+                </button>
+              </Link>
+            </div>
+          </>
+        )}
 
         <div className="grid grid-cols-3 gap-3 mb-8">
           <Card className="p-4 text-center">

@@ -1,23 +1,155 @@
+import { useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, X, Menu as MenuIcon, Moon, Sun, HelpCircle } from "lucide-react";
 import { NavBar } from "@/components/nav-bar";
+import { useTheme } from "@/components/theme-provider";
 
 export default function About() {
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const { theme, toggleTheme, setShowColorPicker } = useTheme();
 
   return (
     <div className="min-h-screen bg-background">
       <NavBar />
       <div className="max-w-4xl mx-auto px-6 py-12">
-        <div className="mb-8">
+        <div className="mb-8 flex items-center justify-between">
           <Link href="/">
             <Button variant="outline" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Retour
             </Button>
           </Link>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={toggleTheme}
+              className="hidden md:inline-flex"
+            >
+              {theme === "light" ? "🌙" : "☀️"}
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              data-testid="button-mobile-menu"
+            >
+              {showMobileMenu ? <X className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
+            </Button>
+          </div>
         </div>
+
+        {showMobileMenu && (
+          <>
+            <div 
+              className="fixed inset-0 bg-black/20 z-40" 
+              onClick={() => setShowMobileMenu(false)}
+            />
+            <div 
+              className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 animate-slide-in p-4 space-y-3 overflow-y-auto"
+            >
+              <button
+                onClick={() => {
+                  toggleTheme();
+                  setShowMobileMenu(false);
+                }}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                {theme === "light" ? (
+                  <>
+                    <Moon className="h-5 w-5 inline mr-2" />
+                    Mode Sombre
+                  </>
+                ) : (
+                  <>
+                    <Sun className="h-5 w-5 inline mr-2" />
+                    Mode Clair
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowColorPicker(true);
+                  setShowMobileMenu(false);
+                }}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                <div className="h-5 w-5 rounded-full bg-primary inline mr-2" />
+                Couleurs
+              </button>
+
+              <Link href="/">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  ← Accueil
+                </button>
+              </Link>
+
+              <Link href="/sierpinski">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  Triangle de Sierpinski →
+                </button>
+              </Link>
+
+              <div className="border-t border-border my-2" />
+
+              <p className="text-xs text-muted-foreground px-2 font-semibold">JEUX & EXPLORATIONS</p>
+
+              <Link href="/game">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🎮 Jeu du Cycle
+                </button>
+              </Link>
+
+              <Link href="/hall-of-fame">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🏆 Hall of Fame
+                </button>
+              </Link>
+
+              <Link href="/art">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🎨 Générateur Art
+                </button>
+              </Link>
+
+              <Link href="/zen">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🧘 Mode Zen
+                </button>
+              </Link>
+
+              <Link href="/fake">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🤔 Mode Fake
+                </button>
+              </Link>
+            </div>
+          </>
+        )}
 
         <div className="space-y-8">
           <div className="text-center mb-12">
