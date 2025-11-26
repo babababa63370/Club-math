@@ -1344,6 +1344,20 @@ export default function Home() {
             </div>
           </div>
         )}
+
+        {/* Navigation Buttons */}
+        <div className="flex gap-3 justify-center flex-wrap mb-4 mt-12">
+          <Link href="/">
+            <Button variant="outline" size="sm" data-testid="link-home">
+              ← Accueil
+            </Button>
+          </Link>
+          <Link href="/sierpinski">
+            <Button variant="outline" size="sm" data-testid="link-sierpinski">
+              Triangle de Sierpinski →
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <style>{`
