@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun, X, Star, Share2, Maximize2, HelpCircle } from "lucide-react";
+import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun, X, Star, Share2, Maximize2, HelpCircle, Menu } from "lucide-react";
 import { Link } from "wouter";
 import { useTheme, type ColorPalette } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { NavBar } from "@/components/nav-bar";
 import { calculateSquareSum } from "@/lib/cycleDetector";
 import { getHistory, addToHistory, clearHistory, deleteHistoryEntry } from "@/lib/historyStorage";
 import { getFavorites, addFavorite, removeFavorite, isFavorite } from "@/lib/favoritesStorage";
@@ -55,6 +54,7 @@ export default function Home() {
   const [showInverse, setShowInverse] = useState(false);
   const [inverseTarget, setInverseTarget] = useState("");
   const [showDescription, setShowDescription] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [totalVisits, setTotalVisits] = useState(0);
   const [currentVisitors, setCurrentVisitors] = useState(1);
   const [totalCalculations, setTotalCalculations] = useState(0);
@@ -332,6 +332,14 @@ export default function Home() {
               >
                 <History className="h-5 w-5" />
               </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                data-testid="button-mobile-menu"
+              >
+                {showMobileMenu ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </Button>
             </div>
           </div>
           <div className="max-w-2xl mx-auto">
@@ -348,6 +356,80 @@ export default function Home() {
           </div>
         </header>
 
+        {showMobileMenu && (
+          <>
+            <div 
+              className="fixed inset-0 bg-black/20 z-40" 
+              onClick={() => setShowMobileMenu(false)}
+            />
+            <div 
+              className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 animate-slide-in p-4 space-y-3"
+            >
+              <button
+                onClick={() => {
+                  setShowFavorites(!showFavorites);
+                  setShowMobileMenu(false);
+                }}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                <Star className={`h-5 w-5 inline mr-2 ${showFavorites ? "fill-yellow-500" : ""}`} />
+                Favoris
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowHistory(!showHistory);
+                  setShowMobileMenu(false);
+                }}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                <History className="h-5 w-5 inline mr-2" />
+                Historique
+              </button>
+
+              <button
+                onClick={() => {
+                  toggleTheme();
+                  setShowMobileMenu(false);
+                }}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                {theme === "light" ? (
+                  <>
+                    <Moon className="h-5 w-5 inline mr-2" />
+                    Mode Sombre
+                  </>
+                ) : (
+                  <>
+                    <Sun className="h-5 w-5 inline mr-2" />
+                    Mode Clair
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowColorPicker(true);
+                  setShowMobileMenu(false);
+                }}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                <div className="h-5 w-5 rounded-full bg-primary inline mr-2" />
+                Couleurs
+              </button>
+
+              <Link href="/about">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  <HelpCircle className="h-5 w-5 inline mr-2" />
+                  À Propos
+                </button>
+              </Link>
+            </div>
+          </>
+        )}
 
         <div className="max-w-md mx-auto mb-16">
           <div className="flex flex-col gap-4">
