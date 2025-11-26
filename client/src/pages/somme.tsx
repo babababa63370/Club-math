@@ -378,17 +378,6 @@ export default function Home() {
 
               <button
                 onClick={() => {
-                  setShowHistory(!showHistory);
-                  setShowMobileMenu(false);
-                }}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                <History className="h-5 w-5 inline mr-2" />
-                Historique
-              </button>
-
-              <button
-                onClick={() => {
                   toggleTheme();
                   setShowMobileMenu(false);
                 }}
