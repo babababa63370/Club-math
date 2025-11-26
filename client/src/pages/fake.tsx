@@ -87,7 +87,7 @@ export default function Fake() {
   const [error, setError] = useState("");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
-  const { theme, toggleTheme, setShowColorPicker } = useTheme();
+  const { theme, toggleTheme, colorPalette, setColorPalette, showColorPicker, setShowColorPicker } = useTheme();
 
   const handleCalculate = () => {
     if (!inputValue.trim()) {

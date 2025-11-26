@@ -38,7 +38,7 @@ export default function Art() {
 
   const [artWorks, setArtWorks] = useState<ArtData[]>([]);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const { theme, toggleTheme, setShowColorPicker } = useTheme();
+  const { theme, toggleTheme, colorPalette, setColorPalette, showColorPicker, setShowColorPicker } = useTheme();
 
   const colors = [
     "#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A", "#98D8C8",
@@ -292,6 +292,34 @@ export default function Art() {
             </Button>
           </Link>
         </div>
+
+        <Dialog open={showColorPicker} onOpenChange={setShowColorPicker}>
+          <DialogContent className="max-w-md" data-testid="color-picker">
+            <DialogHeader>
+              <DialogTitle>Sélectionner une Couleur</DialogTitle>
+            </DialogHeader>
+            <div className="grid grid-cols-2 gap-4">
+              {(["blue", "purple", "cyan", "amber"] as const).map((palette) => (
+                <button
+                  key={palette}
+                  onClick={() => setColorPalette(palette)}
+                  className={`p-4 rounded-lg border-2 transition-all ${
+                    colorPalette === palette ? "border-primary" : "border-border"
+                  } hover-elevate`}
+                  data-testid={`color-${palette}`}
+                >
+                  <div className={`h-12 rounded-md mb-2 ${
+                    palette === "blue" ? "bg-blue-500" :
+                    palette === "purple" ? "bg-purple-500" :
+                    palette === "cyan" ? "bg-cyan-500" :
+                    "bg-amber-500"
+                  }`} />
+                  <p className="font-semibold capitalize">{palette === "blue" ? "Bleu" : palette === "purple" ? "Violet" : palette === "cyan" ? "Cyan" : "Ambre"}</p>
+                </button>
+              ))}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

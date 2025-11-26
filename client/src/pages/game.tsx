@@ -46,7 +46,7 @@ export default function Game() {
   const [totalGames, setTotalGames] = useState(0);
   const [streak, setStreak] = useState(0);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const { theme, toggleTheme, setShowColorPicker } = useTheme();
+  const { theme, toggleTheme, colorPalette, setColorPalette, showColorPicker, setShowColorPicker } = useTheme();
 
   const shortCycleNumbers = [1, 7, 10, 13, 19, 23, 28, 31, 32, 44, 49, 68, 70, 79, 82, 86, 91, 94, 97, 100, 103, 109, 129, 130, 133, 139, 167, 176, 188, 190, 192, 193, 203, 208, 213, 215, 216, 228, 231, 232, 235, 242, 250, 254, 259, 271, 274, 284, 286, 293];
   const longCycleNumbers = [2, 3, 4, 5, 6, 8, 9, 11, 12, 14, 15, 16, 17, 18, 20, 21, 22, 24, 25, 26, 27, 29, 30, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 45, 46, 47, 48, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61];
@@ -327,6 +327,34 @@ export default function Game() {
             Réinitialiser
           </Button>
         </div>
+
+        <Dialog open={showColorPicker} onOpenChange={setShowColorPicker}>
+          <DialogContent className="max-w-md" data-testid="color-picker">
+            <DialogHeader>
+              <DialogTitle>Sélectionner une Couleur</DialogTitle>
+            </DialogHeader>
+            <div className="grid grid-cols-2 gap-4">
+              {(["blue", "purple", "cyan", "amber"] as const).map((palette) => (
+                <button
+                  key={palette}
+                  onClick={() => setColorPalette(palette)}
+                  className={`p-4 rounded-lg border-2 transition-all ${
+                    colorPalette === palette ? "border-primary" : "border-border"
+                  } hover-elevate`}
+                  data-testid={`color-${palette}`}
+                >
+                  <div className={`h-12 rounded-md mb-2 ${
+                    palette === "blue" ? "bg-blue-500" :
+                    palette === "purple" ? "bg-purple-500" :
+                    palette === "cyan" ? "bg-cyan-500" :
+                    "bg-amber-500"
+                  }`} />
+                  <p className="font-semibold capitalize">{palette === "blue" ? "Bleu" : palette === "purple" ? "Violet" : palette === "cyan" ? "Cyan" : "Ambre"}</p>
+                </button>
+              ))}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
