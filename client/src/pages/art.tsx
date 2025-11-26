@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { RefreshCw, X, Menu as MenuIcon, Moon, Sun, HelpCircle } from "lucide-react";
 import { Link } from "wouter";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
