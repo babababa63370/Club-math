@@ -139,21 +139,136 @@ export default function Art() {
             <h1 className="text-4xl font-bold flex-1 flex items-center justify-center gap-3">
               🎨 Générateur de Patterns
             </h1>
-            <div className="flex-1 flex justify-end">
+            <div className="flex-1 flex justify-end gap-2">
               <Button
                 variant="outline"
-                size="icon" className="hidden md:inline-flex"
+                size="icon"
                 onClick={toggleTheme}
                 className="hidden md:inline-flex"
+                data-testid="button-theme-toggle"
               >
                 {theme === "light" ? "🌙" : "☀️"}
               </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                data-testid="button-mobile-menu"
+              >
+                {showMobileMenu ? <X className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
+              </Button>
             </div>
           </div>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Chaque nombre génère un motif unique basé sur son cycle
-          </p>
+          <div className="max-w-2xl mx-auto">
+            <Card className="p-4 hover-elevate cursor-pointer max-h-32 overflow-y-auto">
+              <p className="text-lg text-muted-foreground">
+                Transformez les cycles mathématiques en art visuel. Chaque nombre crée un pattern unique et coloré
+              </p>
+            </Card>
+          </div>
         </header>
+
+        {showMobileMenu && (
+          <>
+            <div 
+              className="fixed inset-0 bg-black/20 z-40" 
+              onClick={() => setShowMobileMenu(false)}
+            />
+            <div 
+              className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 animate-slide-in p-4 space-y-3 overflow-y-auto"
+            >
+              <button
+                onClick={() => {
+                  toggleTheme();
+                  setShowMobileMenu(false);
+                }}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                {theme === "light" ? (
+                  <>
+                    <Moon className="h-5 w-5 inline mr-2" />
+                    Mode Sombre
+                  </>
+                ) : (
+                  <>
+                    <Sun className="h-5 w-5 inline mr-2" />
+                    Mode Clair
+                  </>
+                )}
+              </button>
+
+              <Link href="/">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  ← Accueil
+                </button>
+              </Link>
+
+              <Link href="/sierpinski">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  Triangle de Sierpinski →
+                </button>
+              </Link>
+
+              <div className="border-t border-border my-2" />
+
+              <Link href="/about">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  <HelpCircle className="h-5 w-5 inline mr-2" />
+                  À Propos
+                </button>
+              </Link>
+
+              <div className="border-t border-border my-2" />
+
+              <p className="text-xs text-muted-foreground px-2 font-semibold">JEUX & EXPLORATIONS</p>
+
+              <Link href="/game">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🎮 Jeu du Cycle
+                </button>
+              </Link>
+
+              <Link href="/hall-of-fame">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🏆 Hall of Fame
+                </button>
+              </Link>
+
+              <Link href="/zen">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🧘 Mode Zen
+                </button>
+              </Link>
+
+              <Link href="/fake">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🤔 Mode Fake
+                </button>
+              </Link>
+            </div>
+          </>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {artWorks.map((art, idx) => (
