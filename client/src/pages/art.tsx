@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, X, Menu as MenuIcon, Star, History, Moon, Sun, HelpCircle } from "lucide-react";
 import { Link } from "wouter";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
@@ -37,6 +37,7 @@ export default function Art() {
   }, []);
 
   const [artWorks, setArtWorks] = useState<ArtData[]>([]);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
   const colors = [
