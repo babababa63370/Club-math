@@ -171,8 +171,6 @@ export default function Sierpinski() {
 
   return (
     <div className="min-h-screen bg-background">
-      <NavBar />
-      
       {showMobileMenu && (
         <>
           <div 
@@ -319,9 +317,9 @@ export default function Sierpinski() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex-1" />
             <h1 className="text-3xl md:text-4xl font-bold flex-1 flex items-center justify-center gap-2">
-              Pyramide de Sierpinski
+              🔺 Triangle de Sierpinski
             </h1>
-            <div className="flex-1 flex justify-end">
+            <div className="flex-1 flex justify-end gap-2">
               <Button
                 variant="outline"
                 size="icon"
@@ -330,6 +328,14 @@ export default function Sierpinski() {
                 data-testid="button-theme-toggle"
               >
                 {theme === "light" ? "🌙" : "☀️"}
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+                data-testid="button-mobile-menu"
+              >
+                {showMobileMenu ? <X className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
               </Button>
             </div>
           </div>
