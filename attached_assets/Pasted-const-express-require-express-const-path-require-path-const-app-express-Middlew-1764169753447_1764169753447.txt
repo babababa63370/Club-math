@@ -1,0 +1,77 @@
+const express = require('express');
+const path = require('path');
+const app = express();
+
+// Middleware
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Function to generate Sierpinski pyramid grid
+function generateSierpinskiGrid(numRows) {
+  if (numRows <= 0) {
+    return [[], []];
+  }
+
+  const numCols = (numRows * 2) - 1;
+  const grid = Array(numRows).fill(null).map(() => Array(numCols).fill(0));
+  const redCounts = Array(numRows).fill(0);
+  
+  grid[0][Math.floor(numCols / 2)] = 1;
+  redCounts[0] = 1;
+
+  for (let y = 1; y < numRows; y++) {
+    let currentRedCount = 0;
+    for (let x = 0; x < numCols; x++) {
+      const leftParent = grid[y - 1][(x - 1 + numCols) % numCols];
+      const rightParent = grid[y - 1][(x + 1) % numCols];
+      
+      grid[y][x] = leftParent ^ rightParent;
+      
+      if (grid[y][x] === 1) {
+        currentRedCount++;
+      }
+    }
+    redCounts[y] = currentRedCount;
+  }
+  
+  return [grid, redCounts];
+}
+
+// Routes
+app.get('/', (req, res) => {
+  res.render('index');
+});
+
+app.post('/generate', (req, res) => {
+  try {
+    const numRows = parseInt(req.body.num_rows);
+    
+    if (isNaN(numRows) || numRows < 1) {
+      return res.status(400).send('Nombre de lignes invalide.');
+    }
+    
+    if (numRows > 1000) {
+      return res.status(400).send('Nombre de lignes trop grand pour un affichage stable. Maximum 1000.');
+    }
+
+    const [sierpinskiGrid, redCounts] = generateSierpinskiGrid(numRows);
+    const gridWidth = sierpinskiGrid.length > 0 ? sierpinskiGrid[0].length : 0;
+    
+    const zippedData = sierpinskiGrid.map((row, idx) => ({
+      row: row,
+      redCount: redCounts[idx]
+    }));
+
+    res.render('sierpinski', { zippedData, gridWidth });
+  } catch (error) {
+    res.status(500).send('Erreur lors de la génération de la pyramide.');
+  }
+});
+
+// Start server
+const PORT = 5000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running at http://0.0.0.0:${PORT}`);
+});

@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pyramide de Sierpinski</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-wrapper {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .controls-top {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 12px;
+        }
+
+        .zoom-controls, .nav-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .zoom-controls label, .nav-controls label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-width: 50px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .zoom-level {
+            min-width: 80px;
+            text-align: center;
+            font-weight: 600;
+            color: #333;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 2px solid #667eea;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7ff 0%, #f0e8ff 100%);
+            border-radius: 12px;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .grid-wrapper {
+            border: 3px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+            margin-bottom: 25px;
+        }
+
+        .grid-viewport {
+            overflow: auto;
+            max-height: 600px;
+            position: relative;
+        }
+
+        .main-container {
+            display: inline-grid;
+            grid-template-columns: auto auto 1fr;
+            gap: 0;
+        }
+
+        .header-row, .grid-row {
+            display: contents;
+        }
+
+        .grid-cell-container {
+            display: grid;
+            grid-template-columns: repeat(<%= gridWidth %>, 1fr);
+            gap: 0;
+        }
+
+        .cell, .side-cell, .header-cell {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65em;
+            font-weight: 600;
+            border: 1px solid #ddd;
+            flex-shrink: 0;
+        }
+
+        .cell {
+            background-color: #f8f9fa;
+        }
+
+        .cell.red {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            font-weight: bold;
+        }
+
+        .side-cell {
+            background-color: #f0f0f0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 50px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .header-cell {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 0.65em;
+        }
+
+        .corner-cell {
+            border: none;
+            background-color: white;
+            min-width: 50px;
+        }
+
+        .controls-bottom {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        #download-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #f0f0f0;
+            color: #333;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-link:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .zoom-info {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .line-search-control {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .line-search-control label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .line-search-control input {
+            padding: 8px 12px;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            font-size: 0.9em;
+            width: 80px;
+            font-weight: 500;
+        }
+
+        .line-search-control input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .search-result {
+            min-width: 120px;
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 2px solid #667eea;
+        }
+
+        .search-result.not-found {
+            color: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, #f5f7ff 0%, #f0e8ff 100%);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            margin-top: 15px;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        .formula-box strong {
+            color: #667eea;
+        }
+
+        .formula-box code {
+            background: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔺 Pyramide de Sierpinski</h1>
+    </div>
+
+    <div class="content-wrapper">
+        <!-- Contrôles supérieurs -->
+        <div class="controls-top">
+            <div class="zoom-controls">
+                <label>🔍 Zoom:</label>
+                <button id="zoom-out">−</button>
+                <span class="zoom-level"><span id="zoom-percent">100</span>%</span>
+                <button id="zoom-in">+</button>
+            </div>
+
+            <div class="nav-controls">
+                <label>↔️ Navigation:</label>
+                <button id="pan-left">← Gauche</button>
+                <button id="pan-right">Droite →</button>
+                <button id="pan-up">↑ Haut</button>
+                <button id="pan-down">Bas ↓</button>
+                <button id="reset">Réinitialiser</button>
+            </div>
+
+            <div class="line-search-control">
+                <label>🔎 Carreaux à ligne:</label>
+                <input type="number" id="line-number" min="1" placeholder="N° ligne" />
+                <button id="search-line">Chercher</button>
+                <div class="search-result" id="search-result" style="display: none;"></div>
+            </div>
+            <div id="formula-display"></div>
+        </div>
+
+        <!-- Statistiques -->
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-label">Total Carrés</div>
+                <div class="stat-value" id="total-cells">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Carrés Rouges</div>
+                <div class="stat-value" id="red-cells">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Carrés Blancs</div>
+                <div class="stat-value" id="white-cells">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Pourcentage Rouge</div>
+                <div class="stat-value" id="red-percent">0%</div>
+            </div>
+        </div>
+
+        <!-- Grille -->
+        <div class="grid-wrapper">
+            <div class="grid-viewport" id="grid-viewport">
+                <div class="main-container" id="grid-container">
+                    <div class="header-row">
+                        <div class="corner-cell"></div>
+                        <div class="header-cell">Rouges</div>
+                        <div class="grid-cell-container">
+                            <% for (let i = 0; i < gridWidth; i++) { %>
+                                <div class="header-cell"><%= i + 1 %></div>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <% zippedData.forEach((item, index) => { %>
+                        <div class="grid-row">
+                            <div class="side-cell">L<%= index + 1 %></div>
+                            <div class="side-cell"><%= item.redCount %></div>
+                            <div class="grid-cell-container">
+                                <% item.row.forEach(cell => { %>
+                                    <div class="cell <% if (cell === 1) { %>red<% } %>"></div>
+                                <% }); %>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+            <div class="zoom-info">💡 Utilisez la molette pour zoomer ou les flèches pour naviguer</div>
+        </div>
+
+        <!-- Contrôles inférieurs -->
+        <div class="controls-bottom">
+            <button id="download-btn">📥 Télécharger</button>
+            <a href="/" class="back-link">← Retour</a>
+        </div>
+
+        <div class="loading" id="loading">Préparation du téléchargement...</div>
+    </div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        // ========== ZOOM AND PAN FUNCTIONALITY ==========
+        let zoomLevel = 100;
+        let scrollLeft = 0;
+        let scrollTop = 0;
+        const minZoom = 50;
+        const maxZoom = 300;
+        const zoomStep = 10;
+        const panStep = 50;
+
+        const gridViewport = document.getElementById('grid-viewport');
+        const gridContainer = document.getElementById('grid-container');
+        const zoomPercentSpan = document.getElementById('zoom-percent');
+
+        function updateZoom() {
+            const scale = zoomLevel / 100;
+            gridContainer.style.transform = `scale(${scale})`;
+            gridContainer.style.transformOrigin = 'top left';
+            zoomPercentSpan.textContent = zoomLevel;
+        }
+
+        function applyScroll() {
+            gridViewport.scrollLeft = scrollLeft;
+            gridViewport.scrollTop = scrollTop;
+        }
+
+        document.getElementById('zoom-in').addEventListener('click', () => {
+            if (zoomLevel < maxZoom) {
+                zoomLevel += zoomStep;
+                updateZoom();
+            }
+        });
+
+        document.getElementById('zoom-out').addEventListener('click', () => {
+            if (zoomLevel > minZoom) {
+                zoomLevel -= zoomStep;
+                updateZoom();
+            }
+        });
+
+        document.getElementById('pan-left').addEventListener('click', () => {
+            scrollLeft = Math.max(0, scrollLeft - panStep);
+            applyScroll();
+        });
+
+        document.getElementById('pan-right').addEventListener('click', () => {
+            scrollLeft = Math.min(gridContainer.scrollWidth, scrollLeft + panStep);
+            applyScroll();
+        });
+
+        document.getElementById('pan-up').addEventListener('click', () => {
+            scrollTop = Math.max(0, scrollTop - panStep);
+            applyScroll();
+        });
+
+        document.getElementById('pan-down').addEventListener('click', () => {
+            scrollTop = Math.min(gridContainer.scrollHeight, scrollTop + panStep);
+            applyScroll();
+        });
+
+        document.getElementById('reset').addEventListener('click', () => {
+            zoomLevel = 100;
+            scrollLeft = 0;
+            scrollTop = 0;
+            updateZoom();
+            applyScroll();
+        });
+
+        // Wheel zoom
+        gridViewport.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (e.deltaY > 0) {
+                if (zoomLevel > minZoom) {
+                    zoomLevel -= zoomStep;
+                }
+            } else {
+                if (zoomLevel < maxZoom) {
+                    zoomLevel += zoomStep;
+                }
+            }
+            updateZoom();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (document.activeElement === gridViewport || document.activeElement === document.body) {
+                switch (e.key) {
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        scrollTop = Math.max(0, scrollTop - 20);
+                        applyScroll();
+                        break;
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        scrollTop = Math.min(gridContainer.scrollHeight, scrollTop + 20);
+                        applyScroll();
+                        break;
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        scrollLeft = Math.max(0, scrollLeft - 20);
+                        applyScroll();
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        scrollLeft = Math.min(gridContainer.scrollWidth, scrollLeft + 20);
+                        applyScroll();
+                        break;
+                    case '+':
+                    case '=':
+                        e.preventDefault();
+                        if (zoomLevel < maxZoom) {
+                            zoomLevel += zoomStep;
+                            updateZoom();
+                        }
+                        break;
+                    case '-':
+                        e.preventDefault();
+                        if (zoomLevel > minZoom) {
+                            zoomLevel -= zoomStep;
+                            updateZoom();
+                        }
+                        break;
+                }
+            }
+        });
+
+        // ========== STATISTICS CALCULATION ==========
+        function updateStatistics() {
+            const cells = document.querySelectorAll('.cell');
+            const redCells = document.querySelectorAll('.cell.red');
+            const totalCells = cells.length;
+            const redCount = redCells.length;
+            const whiteCells = totalCells - redCount;
+            const redPercentage = totalCells > 0 ? ((redCount / totalCells) * 100).toFixed(1) : 0;
+
+            document.getElementById('total-cells').textContent = totalCells.toLocaleString();
+            document.getElementById('red-cells').textContent = redCount.toLocaleString();
+            document.getElementById('white-cells').textContent = whiteCells.toLocaleString();
+            document.getElementById('red-percent').textContent = redPercentage + '%';
+        }
+
+        // ========== DOWNLOAD FUNCTIONALITY ==========
+        document.getElementById('download-btn').addEventListener('click', async function() {
+            const btn = this;
+            const loading = document.getElementById('loading');
+            
+            btn.disabled = true;
+            btn.textContent = '⏳ En cours...';
+            loading.classList.add('active');
+
+            try {
+                // Reset zoom and scroll for clean screenshot
+                const originalZoom = zoomLevel;
+                const originalScrollLeft = scrollLeft;
+                const originalScrollTop = scrollTop;
+
+                zoomLevel = 100;
+                scrollLeft = 0;
+                scrollTop = 0;
+                updateZoom();
+                applyScroll();
+
+                setTimeout(async () => {
+                    const container = document.querySelector('.main-container');
+                    const canvas = await html2canvas(container, {
+                        scale: 2,
+                        backgroundColor: '#ffffff'
+                    });
+                    
+                    const link = document.createElement('a');
+                    link.download = 'pyramide_sierpinski.png';
+                    link.href = canvas.toDataURL();
+                    link.click();
+
+                    // Restore zoom and scroll
+                    zoomLevel = originalZoom;
+                    scrollLeft = originalScrollLeft;
+                    scrollTop = originalScrollTop;
+                    updateZoom();
+                    applyScroll();
+
+                    btn.textContent = '✓ Téléchargé!';
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.textContent = '📥 Télécharger';
+                        loading.classList.remove('active');
+                    }, 1500);
+                }, 100);
+            } catch (error) {
+                console.error('Erreur:', error);
+                btn.textContent = '❌ Erreur';
+                btn.disabled = false;
+                loading.classList.remove('active');
+                setTimeout(() => {
+                    btn.textContent = '📥 Télécharger';
+                }, 2000);
+            }
+        });
+
+        // ========== LINE SEARCH FUNCTIONALITY ==========
+        const zippedDataArray = [
+            <% zippedData.forEach((item, idx) => { %>
+                { line: <%= idx + 1 %>, redCount: <%= item.redCount %> },
+            <% }); %>
+        ];
+
+        // Count bits in binary representation
+        function countBits(n) {
+            let count = 0;
+            while (n) {
+                count += n & 1;
+                n >>= 1;
+            }
+            return count;
+        }
+
+        document.getElementById('search-line').addEventListener('click', () => {
+            const lineNum = parseInt(document.getElementById('line-number').value);
+            const resultDiv = document.getElementById('search-result');
+            const formulaDiv = document.getElementById('formula-display');
+
+            if (isNaN(lineNum) || lineNum < 1 || lineNum > zippedDataArray.length) {
+                resultDiv.textContent = '❌ Ligne invalide';
+                resultDiv.classList.add('not-found');
+                resultDiv.style.display = 'block';
+                formulaDiv.innerHTML = '';
+                return;
+            }
+
+            const lineData = zippedDataArray[lineNum - 1];
+            resultDiv.textContent = `Ligne ${lineNum}: ${lineData.redCount} 🔴`;
+            resultDiv.classList.remove('not-found');
+            resultDiv.style.display = 'block';
+
+            // Calculate formula
+            const n = lineNum - 1; // 0-indexed
+            const bitCount = countBits(n);
+            const formulaResult = Math.pow(2, bitCount);
+            const binaryN = n.toString(2);
+            const totalCells = lineData.redCount + (zippedDataArray[lineNum - 1].redCount === lineData.redCount ? 0 : 0);
+            const gridWidth = <%= gridWidth %>;
+
+            formulaDiv.innerHTML = `
+                <div class="formula-box">
+                    <strong>📐 Formule:</strong><br/>
+                    Ligne ${lineNum} (index ${n}) en binaire = <code>${binaryN}</code><br/>
+                    Nombre de 1 en binaire = <code>${bitCount}</code><br/>
+                    <strong>Carrés rouges = 2<sup>${bitCount}</sup> = ${formulaResult}</strong><br/>
+                    <br/>
+                    <strong>Total carrés:</strong> ${gridWidth}<br/>
+                    <strong>Carrés blancs:</strong> ${gridWidth - lineData.redCount}
+                </div>
+            `;
+        });
+
+        document.getElementById('line-number').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('search-line').click();
+            }
+        });
+
+        // Initialize
+        updateStatistics();
+        updateZoom();
+    </script>
+</body>
+</html>
