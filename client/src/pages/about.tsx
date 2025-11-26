@@ -2,13 +2,14 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ArrowLeft, X, Menu as MenuIcon, Moon, Sun, HelpCircle } from "lucide-react";
 import { NavBar } from "@/components/nav-bar";
 import { useTheme } from "@/components/theme-provider";
 
 export default function About() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const { theme, toggleTheme, setShowColorPicker } = useTheme();
+  const { theme, toggleTheme, colorPalette, setColorPalette, showColorPicker, setShowColorPicker } = useTheme();
 
   return (
     <div className="min-h-screen bg-background">
@@ -234,6 +235,34 @@ export default function About() {
             </Link>
           </div>
         </div>
+
+        <Dialog open={showColorPicker} onOpenChange={setShowColorPicker}>
+          <DialogContent className="max-w-md" data-testid="color-picker">
+            <DialogHeader>
+              <DialogTitle>Sélectionner une Couleur</DialogTitle>
+            </DialogHeader>
+            <div className="grid grid-cols-2 gap-4">
+              {(["blue", "purple", "cyan", "amber"] as const).map((palette) => (
+                <button
+                  key={palette}
+                  onClick={() => setColorPalette(palette)}
+                  className={`p-4 rounded-lg border-2 transition-all ${
+                    colorPalette === palette ? "border-primary" : "border-border"
+                  } hover-elevate`}
+                  data-testid={`color-${palette}`}
+                >
+                  <div className={`h-12 rounded-md mb-2 ${
+                    palette === "blue" ? "bg-blue-500" :
+                    palette === "purple" ? "bg-purple-500" :
+                    palette === "cyan" ? "bg-cyan-500" :
+                    "bg-amber-500"
+                  }`} />
+                  <p className="font-semibold capitalize">{palette === "blue" ? "Bleu" : palette === "purple" ? "Violet" : palette === "cyan" ? "Cyan" : "Ambre"}</p>
+                </button>
+              ))}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

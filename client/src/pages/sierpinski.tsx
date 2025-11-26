@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Plus, Minus, RotateCcw, Download, X, Menu as MenuIcon, Moon, Sun, Star, History } from "lucide-react";
 import { Link } from "wouter";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -23,8 +24,7 @@ export default function Sierpinski() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const gridViewportRef = useRef<HTMLDivElement>(null);
   const gridContainerRef = useRef<HTMLDivElement>(null);
-  const { theme, toggleTheme } = useTheme();
-  const { colorPalette, setShowColorPicker } = useTheme();
+  const { theme, toggleTheme, colorPalette, setColorPalette, showColorPicker, setShowColorPicker } = useTheme();
 
   const CELL_SIZE = 40;
   const MIN_ZOOM = 50;
@@ -595,6 +595,34 @@ export default function Sierpinski() {
             </Button>
           </Link>
         </div>
+
+        <Dialog open={showColorPicker} onOpenChange={setShowColorPicker}>
+          <DialogContent className="max-w-md" data-testid="color-picker">
+            <DialogHeader>
+              <DialogTitle>Sélectionner une Couleur</DialogTitle>
+            </DialogHeader>
+            <div className="grid grid-cols-2 gap-4">
+              {(["blue", "purple", "cyan", "amber"] as const).map((palette) => (
+                <button
+                  key={palette}
+                  onClick={() => setColorPalette(palette)}
+                  className={`p-4 rounded-lg border-2 transition-all ${
+                    colorPalette === palette ? "border-primary" : "border-border"
+                  } hover-elevate`}
+                  data-testid={`color-${palette}`}
+                >
+                  <div className={`h-12 rounded-md mb-2 ${
+                    palette === "blue" ? "bg-blue-500" :
+                    palette === "purple" ? "bg-purple-500" :
+                    palette === "cyan" ? "bg-cyan-500" :
+                    "bg-amber-500"
+                  }`} />
+                  <p className="font-semibold capitalize">{palette === "blue" ? "Bleu" : palette === "purple" ? "Violet" : palette === "cyan" ? "Cyan" : "Ambre"}</p>
+                </button>
+              ))}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
