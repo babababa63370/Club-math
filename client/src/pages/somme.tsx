@@ -427,6 +427,55 @@ export default function Home() {
                   À Propos
                 </button>
               </Link>
+
+              <div className="border-t border-border my-2" />
+
+              <p className="text-xs text-muted-foreground px-2 font-semibold">JEUX & EXPLORATIONS</p>
+
+              <Link href="/game">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🎮 Jeu du Cycle
+                </button>
+              </Link>
+
+              <Link href="/hall-of-fame">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🏆 Hall of Fame
+                </button>
+              </Link>
+
+              <Link href="/art">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🎨 Générateur Art
+                </button>
+              </Link>
+
+              <Link href="/zen">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🧘 Mode Zen
+                </button>
+              </Link>
+
+              <Link href="/fake">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+                >
+                  🤔 Mode Fake
+                </button>
+              </Link>
             </div>
           </>
         )}
