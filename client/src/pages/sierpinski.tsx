@@ -171,6 +171,7 @@ export default function Sierpinski() {
 
   return (
     <div className="min-h-screen bg-background">
+      <NavBar />
       
       {showMobileMenu && (
         <>
