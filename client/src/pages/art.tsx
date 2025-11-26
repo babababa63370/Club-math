@@ -159,13 +159,6 @@ export default function Art() {
               </Button>
             </div>
           </div>
-          <div className="max-w-2xl mx-auto">
-            <Card className="p-4 hover-elevate cursor-pointer max-h-32 overflow-y-auto">
-              <p className="text-lg text-muted-foreground">
-                Transformez les cycles mathématiques en art visuel. Chaque nombre crée un pattern unique et coloré
-              </p>
-            </Card>
-          </div>
         </header>
 
         {showMobileMenu && (

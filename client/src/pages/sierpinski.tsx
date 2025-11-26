@@ -333,13 +333,6 @@ export default function Sierpinski() {
               </Button>
             </div>
           </div>
-          <div className="max-w-2xl mx-auto">
-            <Card className="p-4 hover-elevate cursor-pointer max-h-32 overflow-y-auto">
-              <p className="text-lg text-muted-foreground">
-                Explorez la fractale infinie de Sierpinski avec ses motifs auto-similaires générés par un algorithme XOR
-              </p>
-            </Card>
-          </div>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">

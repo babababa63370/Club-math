@@ -130,13 +130,6 @@ export default function HallOfFame() {
               </Button>
             </div>
           </div>
-          <div className="max-w-2xl mx-auto">
-            <Card className="p-4 hover-elevate cursor-pointer max-h-32 overflow-y-auto">
-              <p className="text-lg text-muted-foreground">
-                Découvrez les records mathématiques : les cycles les plus longs, les plus courts, et les convergences les plus rapides
-              </p>
-            </Card>
-          </div>
         </header>
 
         {showMobileMenu && (

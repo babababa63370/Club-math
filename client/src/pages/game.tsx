@@ -127,13 +127,6 @@ export default function Game() {
               </Button>
             </div>
           </div>
-          <div className="max-w-2xl mx-auto">
-            <Card className="p-4 hover-elevate cursor-pointer max-h-32 overflow-y-auto">
-              <p className="text-lg text-muted-foreground">
-                Testez votre intuition ! Devinez si le cycle d'un nombre est court ou long et montez votre score
-              </p>
-            </Card>
-          </div>
         </header>
 
         {showMobileMenu && (

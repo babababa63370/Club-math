@@ -154,15 +154,6 @@ export default function Fake() {
               </Button>
             </div>
           </div>
-          <div className="max-w-2xl mx-auto">
-            <button className="w-full text-left">
-              <Card className="p-4 hover-elevate cursor-pointer">
-                <p className="text-lg text-muted-foreground">
-                  ⚠️ ATTENTION: Cette page affiche volontairement des calculs INCORRECTS pour tester vos yeux mathématiques!
-                </p>
-              </Card>
-            </button>
-          </div>
         </header>
 
         {showMobileMenu && (
