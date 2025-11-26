@@ -332,15 +332,6 @@ export default function Home() {
               >
                 <History className="h-5 w-5" />
               </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setShowMobileMenu(!showMobileMenu)}
-                data-testid="button-mobile-menu"
-                className="md:hidden"
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
             </div>
           </div>
           <div className="max-w-2xl mx-auto">
