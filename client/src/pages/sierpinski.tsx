@@ -191,7 +191,7 @@ export default function Sierpinski() {
             </div>
           </div>
           <div className="max-w-2xl mx-auto">
-            <Card className="p-4 hover-elevate cursor-pointer">
+            <Card className="p-4 hover-elevate cursor-pointer max-h-32 overflow-y-auto">
               <p className="text-lg text-muted-foreground">
                 Explorez la fractale infinie de Sierpinski avec ses motifs auto-similaires générés par un algorithme XOR
               </p>

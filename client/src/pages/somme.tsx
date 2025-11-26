@@ -347,7 +347,7 @@ export default function Home() {
               onClick={() => setShowDescription(!showDescription)}
               className="w-full text-left"
             >
-              <Card className="p-4 hover-elevate cursor-pointer">
+              <Card className="p-4 hover-elevate cursor-pointer max-h-32 overflow-y-auto">
                 <p className="text-lg text-muted-foreground">
                   Entrez un nombre pour découvrir la suite formée par la somme des carrés de ses chiffres, et observez le cycle qui se forme
                 </p>
