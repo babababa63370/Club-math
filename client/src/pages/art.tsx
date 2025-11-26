@@ -233,7 +233,7 @@ export default function Art() {
 
               <p className="text-xs text-muted-foreground px-2 font-semibold">JEUX & EXPLORATIONS</p>
 
-              <Link href="/game">
+              <Link href="/somme/game">
                 <button
                   onClick={() => setShowMobileMenu(false)}
                   className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
@@ -242,7 +242,7 @@ export default function Art() {
                 </button>
               </Link>
 
-              <Link href="/hall-of-fame">
+              <Link href="/somme/hall-of-fame">
                 <button
                   onClick={() => setShowMobileMenu(false)}
                   className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
@@ -251,7 +251,7 @@ export default function Art() {
                 </button>
               </Link>
 
-              <Link href="/zen">
+              <Link href="/somme/zen">
                 <button
                   onClick={() => setShowMobileMenu(false)}
                   className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
@@ -260,7 +260,7 @@ export default function Art() {
                 </button>
               </Link>
 
-              <Link href="/fake">
+              <Link href="/somme/fake">
                 <button
                   onClick={() => setShowMobileMenu(false)}
                   className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
@@ -286,7 +286,7 @@ export default function Art() {
             <RefreshCw className="h-4 w-4" />
             Générer Nouveaux Patterns
           </Button>
-          <Link href="/hall-of-fame">
+          <Link href="/somme/hall-of-fame">
             <Button variant="outline">
               Hall of Fame 🏆
             </Button>

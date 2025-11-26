@@ -228,7 +228,7 @@ export default function Fake() {
 
               <p className="text-xs text-muted-foreground px-2 font-semibold">JEUX & EXPLORATIONS</p>
 
-              <Link href="/game">
+              <Link href="/somme/game">
                 <button
                   onClick={() => setShowMobileMenu(false)}
                   className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
@@ -237,7 +237,7 @@ export default function Fake() {
                 </button>
               </Link>
 
-              <Link href="/hall-of-fame">
+              <Link href="/somme/hall-of-fame">
                 <button
                   onClick={() => setShowMobileMenu(false)}
                   className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
@@ -246,7 +246,7 @@ export default function Fake() {
                 </button>
               </Link>
 
-              <Link href="/art">
+              <Link href="/somme/art">
                 <button
                   onClick={() => setShowMobileMenu(false)}
                   className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
@@ -255,7 +255,7 @@ export default function Fake() {
                 </button>
               </Link>
 
-              <Link href="/zen">
+              <Link href="/somme/zen">
                 <button
                   onClick={() => setShowMobileMenu(false)}
                   className="w-full px-4 py-3 rounded-lg hover-elevate text-left"

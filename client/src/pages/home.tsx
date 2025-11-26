@@ -436,7 +436,7 @@ export default function Home() {
 
                 <div className="border-t my-2" />
 
-                <Link href="/game">
+                <Link href="/somme/game">
                   <button
                     onClick={() => setShowMobileMenu(false)}
                     className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
@@ -446,7 +446,7 @@ export default function Home() {
                   </button>
                 </Link>
 
-                <Link href="/hall-of-fame">
+                <Link href="/somme/hall-of-fame">
                   <button
                     onClick={() => setShowMobileMenu(false)}
                     className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
@@ -456,7 +456,7 @@ export default function Home() {
                   </button>
                 </Link>
 
-                <Link href="/art">
+                <Link href="/somme/art">
                   <button
                     onClick={() => setShowMobileMenu(false)}
                     className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
@@ -466,7 +466,7 @@ export default function Home() {
                   </button>
                 </Link>
 
-                <Link href="/zen">
+                <Link href="/somme/zen">
                   <button
                     onClick={() => setShowMobileMenu(false)}
                     className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
@@ -476,7 +476,7 @@ export default function Home() {
                   </button>
                 </Link>
 
-                <Link href="/fake">
+                <Link href="/somme/fake">
                   <button
                     onClick={() => setShowMobileMenu(false)}
                     className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"

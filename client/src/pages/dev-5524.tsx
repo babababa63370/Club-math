@@ -229,7 +229,7 @@ if __name__ == '__main__':
               </button>
             </Link>
 
-            <Link href="/game">
+            <Link href="/somme/game">
               <button
                 onClick={() => setShowMenu(false)}
                 className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
@@ -238,7 +238,7 @@ if __name__ == '__main__':
               </button>
             </Link>
 
-            <Link href="/fake">
+            <Link href="/somme/fake">
               <button
                 onClick={() => setShowMenu(false)}
                 className="w-full px-4 py-3 rounded-lg hover-elevate text-left"

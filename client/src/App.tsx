@@ -24,11 +24,11 @@ function Router() {
       <Route path="/sierpinski" component={Sierpinski} />
       <Route path="/about" component={About} />
       <Route path="/dev-5524" component={Dev5524} />
-      <Route path="/fake" component={Fake} />
-      <Route path="/game" component={Game} />
-      <Route path="/hall-of-fame" component={HallOfFame} />
-      <Route path="/art" component={Art} />
-      <Route path="/zen" component={Zen} />
+      <Route path="/somme/fake" component={Fake} />
+      <Route path="/somme/game" component={Game} />
+      <Route path="/somme/hall-of-fame" component={HallOfFame} />
+      <Route path="/somme/art" component={Art} />
+      <Route path="/somme/zen" component={Zen} />
       <Route component={NotFound} />
     </Switch>
   );
