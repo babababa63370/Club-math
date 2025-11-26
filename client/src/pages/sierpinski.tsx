@@ -152,14 +152,24 @@ export default function Sierpinski() {
   const redPercent = totalCells > 0 ? ((redCells / totalCells) * 100).toFixed(1) : "0";
 
   const downloadImage = async () => {
-    const element = gridViewportRef.current;
-    if (!element) return;
+    const container = gridContainerRef.current;
+    if (!container) return;
 
     try {
-      const canvas = await (window as any).html2canvas(element, {
+      // Temporarily remove scale transform for capture
+      const originalTransform = container.style.transform;
+      container.style.transform = "scale(1)";
+      
+      const canvas = await (window as any).html2canvas(container, {
         backgroundColor: theme === "light" ? "#ffffff" : "#1a1a1a",
         scale: 2,
+        allowTaint: true,
+        useCORS: true,
       });
+      
+      // Restore original transform
+      container.style.transform = originalTransform;
+      
       const link = document.createElement("a");
       link.href = canvas.toDataURL();
       link.download = `sierpinski-${numRows}.png`;
