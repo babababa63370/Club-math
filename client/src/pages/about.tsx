@@ -2,10 +2,12 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
+import { NavBar } from "@/components/nav-bar";
 
 export default function About() {
   return (
     <div className="min-h-screen bg-background">
+      <NavBar />
       <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="mb-8">
           <Link href="/">

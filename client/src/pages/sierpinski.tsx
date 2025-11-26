@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { Menu, Plus, Minus, RotateCcw, Download } from "lucide-react";
+import { Plus, Minus, RotateCcw, Download } from "lucide-react";
 import { Link } from "wouter";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { NavBar } from "@/components/nav-bar";
 
 interface SierpinskiGrid {
   row: number[];
@@ -11,7 +12,6 @@ interface SierpinskiGrid {
 }
 
 export default function Sierpinski() {
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [numRows, setNumRows] = useState(50);
   const [grid, setGrid] = useState<SierpinskiGrid[]>([]);
   const [zoomLevel, setZoomLevel] = useState(100);
@@ -169,45 +169,7 @@ export default function Sierpinski() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="fixed top-6 right-6 md:hidden z-30">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setShowMobileMenu(!showMobileMenu)}
-          data-testid="button-mobile-menu"
-        >
-          <Menu className="h-5 w-5" />
-        </Button>
-      </div>
-
-      {showMobileMenu && (
-        <>
-          <div
-            className="fixed inset-0 bg-black/20 z-40 md:hidden"
-            onClick={() => setShowMobileMenu(false)}
-          />
-          <div className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 md:hidden animate-slide-in p-4 space-y-3">
-            <Link href="/">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-                data-testid="link-home-mobile"
-              >
-                Accueil
-              </button>
-            </Link>
-            <Link href="/somme">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-                data-testid="link-somme-mobile"
-              >
-                Somme des Carrés
-              </button>
-            </Link>
-          </div>
-        </>
-      )}
+      <NavBar />
 
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
         <header className="text-center py-6 mb-8">

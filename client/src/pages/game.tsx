@@ -37,7 +37,6 @@ export default function Game() {
     return () => style.remove();
   }, []);
 
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [currentNumber, setCurrentNumber] = useState(0);
   const [actualCycleLength, setActualCycleLength] = useState(0);
   const [score, setScore] = useState(0);
@@ -48,7 +47,6 @@ export default function Game() {
   const [streak, setStreak] = useState(0);
   const { theme, toggleTheme } = useTheme();
 
-  // Pré-calculer les nombres avec cycles courts vs longs (50/50)
   const shortCycleNumbers = [1, 7, 10, 13, 19, 23, 28, 31, 32, 44, 49, 68, 70, 79, 82, 86, 91, 94, 97, 100, 103, 109, 129, 130, 133, 139, 167, 176, 188, 190, 192, 193, 203, 208, 213, 215, 216, 228, 231, 232, 235, 242, 250, 254, 259, 271, 274, 284, 286, 293];
   const longCycleNumbers = [2, 3, 4, 5, 6, 8, 9, 11, 12, 14, 15, 16, 17, 18, 20, 21, 22, 24, 25, 26, 27, 29, 30, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 45, 46, 47, 48, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61];
 
@@ -100,79 +98,7 @@ export default function Game() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="fixed top-6 right-6 md:hidden z-30">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setShowMobileMenu(!showMobileMenu)}
-        >
-          <Menu className="h-5 w-5" />
-        </Button>
-      </div>
-
-      {showMobileMenu && (
-        <>
-          <div 
-            className="fixed inset-0 bg-black/20 z-40 md:hidden" 
-            onClick={() => setShowMobileMenu(false)}
-          />
-          <div 
-            className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 md:hidden animate-slide-in p-4 space-y-3"
-          >
-            <Link href="/">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                Calculateur
-              </button>
-            </Link>
-            <Link href="/about">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                À propos
-              </button>
-            </Link>
-
-            <div className="border-t my-2" />
-
-            <Link href="/hall-of-fame">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                🏆 Hall of Fame
-              </button>
-            </Link>
-            <Link href="/art">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                🎨 Générateur Art
-              </button>
-            </Link>
-            <Link href="/zen">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                🧘 Mode Zen
-              </button>
-            </Link>
-            <Link href="/fake">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                🎭 Mode Fake
-              </button>
-            </Link>
-          </div>
-        </>
-      )}
+      <NavBar />
 
       <div className="max-w-2xl mx-auto px-6 py-12">
         <header className="text-center py-8 mb-8">

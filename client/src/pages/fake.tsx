@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun, X, Star, Share2, Maximize2, HelpCircle, Menu } from "lucide-react";
+import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun, X, Star, Share2, Maximize2, HelpCircle } from "lucide-react";
 import { Link } from "wouter";
 import { useTheme, type ColorPalette } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { NavBar } from "@/components/nav-bar";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from "recharts";
 import type { CalculationResult } from "@shared/schema";
 
@@ -84,7 +85,6 @@ export default function Fake() {
   const [inputValue, setInputValue] = useState("");
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [error, setError] = useState("");
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
   const { theme, toggleTheme } = useTheme();
 
@@ -121,52 +121,7 @@ export default function Fake() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="fixed top-6 right-6 md:hidden z-30">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setShowMobileMenu(!showMobileMenu)}
-        >
-          <Menu className="h-5 w-5" />
-        </Button>
-      </div>
-
-      {showMobileMenu && (
-        <>
-          <div 
-            className="fixed inset-0 bg-black/20 z-40 md:hidden" 
-            onClick={() => setShowMobileMenu(false)}
-          />
-          <div 
-            className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 md:hidden animate-slide-in p-4 space-y-3"
-          >
-            <Link href="/">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                Calculateur
-              </button>
-            </Link>
-            <Link href="/about">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                À propos
-              </button>
-            </Link>
-            <Link href="/game">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                Jeu
-              </button>
-            </Link>
-          </div>
-        </>
-      )}
+      <NavBar />
 
       <div className="max-w-4xl mx-auto px-6 py-12">
         <header className="text-center py-8 mb-8">

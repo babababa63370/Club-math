@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun, X, Star, Share2, Maximize2, HelpCircle, Menu } from "lucide-react";
+import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun, X, Star, Share2, Maximize2, HelpCircle } from "lucide-react";
 import { Link } from "wouter";
 import { useTheme, type ColorPalette } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { NavBar } from "@/components/nav-bar";
 import { calculateSquareSum } from "@/lib/cycleDetector";
 import { getHistory, addToHistory, clearHistory, deleteHistoryEntry } from "@/lib/historyStorage";
 import { getFavorites, addFavorite, removeFavorite, isFavorite } from "@/lib/favoritesStorage";
@@ -53,7 +54,6 @@ export default function Home() {
   const [showGlobalStats, setShowGlobalStats] = useState(false);
   const [showInverse, setShowInverse] = useState(false);
   const [inverseTarget, setInverseTarget] = useState("");
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showDescription, setShowDescription] = useState(false);
   const [totalVisits, setTotalVisits] = useState(0);
   const [currentVisitors, setCurrentVisitors] = useState(1);
@@ -357,158 +357,6 @@ export default function Home() {
           </div>
         </header>
 
-        {showMobileMenu && (
-          <>
-            <div 
-              className="fixed inset-0 bg-black/20 z-40 md:hidden" 
-              onClick={() => setShowMobileMenu(false)}
-              data-testid="mobile-menu-backdrop"
-            />
-            <div 
-              className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 md:hidden animate-slide-in"
-              data-testid="mobile-menu"
-            >
-              <div className="p-4 space-y-3">
-                <button
-                  onClick={() => {
-                    setShowFavorites(!showFavorites);
-                    setShowMobileMenu(false);
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                >
-                  <Star className={`h-5 w-5 ${showFavorites ? "fill-yellow-500" : ""}`} />
-                  <span>Favoris</span>
-                </button>
-                
-                <button
-                  onClick={() => {
-                    setShowHistory(!showHistory);
-                    setShowMobileMenu(false);
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                >
-                  <History className="h-5 w-5" />
-                  <span>Historique</span>
-                </button>
-                
-                <button
-                  onClick={() => {
-                    toggleTheme();
-                    setShowMobileMenu(false);
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                >
-                  {theme === "light" ? (
-                    <>
-                      <Moon className="h-5 w-5" />
-                      <span>Mode Sombre</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sun className="h-5 w-5" />
-                      <span>Mode Clair</span>
-                    </>
-                  )}
-                </button>
-                
-                <button
-                  onClick={() => {
-                    setShowColorPicker(true);
-                    setShowMobileMenu(false);
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                >
-                  <div className="h-5 w-5 rounded-full bg-primary" />
-                  <span>Couleurs</span>
-                </button>
-
-                <Link href="/about">
-                  <button
-                    onClick={() => setShowMobileMenu(false)}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                  >
-                    <HelpCircle className="h-5 w-5" />
-                    <span>À Propos</span>
-                  </button>
-                </Link>
-
-                <div className="border-t my-2" />
-
-                <div className="border-t my-2" />
-
-                <Link href="/">
-                  <button
-                    onClick={() => setShowMobileMenu(false)}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                  >
-                    <span>← Accueil</span>
-                  </button>
-                </Link>
-
-                <Link href="/sierpinski">
-                  <button
-                    onClick={() => setShowMobileMenu(false)}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                  >
-                    <span>🔺 Sierpinski</span>
-                  </button>
-                </Link>
-
-                <div className="border-t my-2" />
-
-                <Link href="/game">
-                  <button
-                    onClick={() => setShowMobileMenu(false)}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                  >
-                    <span className="text-lg">🎮</span>
-                    <span>Jeu du Cycle</span>
-                  </button>
-                </Link>
-
-                <Link href="/hall-of-fame">
-                  <button
-                    onClick={() => setShowMobileMenu(false)}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                  >
-                    <span className="text-lg">🏆</span>
-                    <span>Hall of Fame</span>
-                  </button>
-                </Link>
-
-                <Link href="/art">
-                  <button
-                    onClick={() => setShowMobileMenu(false)}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                  >
-                    <span className="text-lg">🎨</span>
-                    <span>Générateur Art</span>
-                  </button>
-                </Link>
-
-                <Link href="/zen">
-                  <button
-                    onClick={() => setShowMobileMenu(false)}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                  >
-                    <span className="text-lg">🧘</span>
-                    <span>Mode Zen</span>
-                  </button>
-                </Link>
-
-                <Link href="/fake">
-                  <button
-                    onClick={() => setShowMobileMenu(false)}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                  >
-                    <span className="text-lg">🎭</span>
-                    <span>Mode Fake</span>
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </>
-        )}
 
         <div className="max-w-md mx-auto mb-16">
           <div className="flex flex-col gap-4">

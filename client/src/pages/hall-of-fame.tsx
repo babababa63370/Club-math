@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { Menu } from "lucide-react";
 import { Link } from "wouter";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { NavBar } from "@/components/nav-bar";
 import { calculateSquareSum } from "@/lib/cycleDetector";
 
 interface Record {
@@ -35,7 +35,6 @@ export default function HallOfFame() {
     return () => style.remove();
   }, []);
 
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [records, setRecords] = useState<Record[]>([]);
   const { theme, toggleTheme } = useTheme();
 
@@ -101,78 +100,7 @@ export default function HallOfFame() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="fixed top-6 right-6 md:hidden z-30">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setShowMobileMenu(!showMobileMenu)}
-        >
-          <Menu className="h-5 w-5" />
-        </Button>
-      </div>
-
-      {showMobileMenu && (
-        <>
-          <div 
-            className="fixed inset-0 bg-black/20 z-40 md:hidden" 
-            onClick={() => setShowMobileMenu(false)}
-          />
-          <div 
-            className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 md:hidden animate-slide-in p-4 space-y-3"
-          >
-            <Link href="/">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                Calculateur
-              </button>
-            </Link>
-            <Link href="/about">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                À propos
-              </button>
-            </Link>
-            <div className="border-t my-2" />
-
-            <Link href="/game">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                🎮 Jeu du Cycle
-              </button>
-            </Link>
-            <Link href="/art">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                🎨 Générateur Art
-              </button>
-            </Link>
-            <Link href="/zen">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                🧘 Mode Zen
-              </button>
-            </Link>
-            <Link href="/fake">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                🎭 Mode Fake
-              </button>
-            </Link>
-          </div>
-        </>
-      )}
+      <NavBar />
 
       <div className="max-w-6xl mx-auto px-6 py-12">
         <header className="text-center py-8 mb-12">

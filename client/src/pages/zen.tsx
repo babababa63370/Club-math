@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Menu, Pause, Play } from "lucide-react";
+import { Pause, Play } from "lucide-react";
 import { Link } from "wouter";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { NavBar } from "@/components/nav-bar";
 import { calculateSquareSum } from "@/lib/cycleDetector";
 
 interface ZenNumber {
@@ -55,7 +56,6 @@ export default function Zen() {
     return () => style.remove();
   }, []);
 
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [numbers, setNumbers] = useState<ZenNumber[]>([]);
   const [isPlaying, setIsPlaying] = useState(true);
   const { theme, toggleTheme } = useTheme();
@@ -98,7 +98,8 @@ export default function Zen() {
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
-      <div className="fixed top-6 right-6 z-30 flex gap-2">
+      <NavBar />
+      <div className="fixed top-6 right-6 z-30 hidden md:flex">
         <Button
           variant="outline"
           size="icon"
@@ -106,78 +107,7 @@ export default function Zen() {
         >
           {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
         </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setShowMobileMenu(!showMobileMenu)}
-          className="md:hidden"
-        >
-          <Menu className="h-5 w-5" />
-        </Button>
       </div>
-
-      {showMobileMenu && (
-        <>
-          <div 
-            className="fixed inset-0 bg-black/20 z-40 md:hidden" 
-            onClick={() => setShowMobileMenu(false)}
-          />
-          <div 
-            className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 md:hidden animate-slide-in p-4 space-y-3"
-          >
-            <Link href="/">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                Calculateur
-              </button>
-            </Link>
-            <Link href="/about">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                À propos
-              </button>
-            </Link>
-            <div className="border-t my-2" />
-
-            <Link href="/game">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                🎮 Jeu du Cycle
-              </button>
-            </Link>
-            <Link href="/hall-of-fame">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                🏆 Hall of Fame
-              </button>
-            </Link>
-            <Link href="/art">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                🎨 Générateur Art
-              </button>
-            </Link>
-            <Link href="/fake">
-              <button
-                onClick={() => setShowMobileMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                🎭 Mode Fake
-              </button>
-            </Link>
-          </div>
-        </>
-      )}
 
       <div className="h-screen flex items-center justify-center p-6">
         <div className="w-full max-w-6xl">
