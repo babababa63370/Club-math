@@ -12,7 +12,6 @@ export default function About() {
 
   return (
     <div className="min-h-screen bg-background">
-      <NavBar />
       <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="mb-8 flex items-center justify-between">
           <Link href="/">

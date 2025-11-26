@@ -99,7 +99,6 @@ export default function Zen() {
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
-      <NavBar />
       <div className="fixed top-6 right-6 z-30 flex gap-2">
         <Button
           variant="outline"
