@@ -120,9 +120,13 @@ export default function HallOfFame() {
               </Button>
             </div>
           </div>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Les records absolus des nombres de 1 à 100
-          </p>
+          <div className="max-w-2xl mx-auto">
+            <Card className="p-4 hover-elevate cursor-pointer max-h-32 overflow-y-auto">
+              <p className="text-lg text-muted-foreground">
+                Découvrez les records mathématiques : les cycles les plus longs, les plus courts, et les convergences les plus rapides
+              </p>
+            </Card>
+          </div>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">

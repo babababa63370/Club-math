@@ -141,7 +141,7 @@ export default function Art() {
             <div className="flex-1 flex justify-end">
               <Button
                 variant="outline"
-                size="icon"
+                size="icon" className="hidden md:inline-flex"
                 onClick={toggleTheme}
                 className="hidden md:inline-flex"
               >
