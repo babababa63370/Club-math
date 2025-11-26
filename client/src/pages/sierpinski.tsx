@@ -190,9 +190,13 @@ export default function Sierpinski() {
               </Button>
             </div>
           </div>
-          <p className="text-sm md:text-base text-muted-foreground">
-            Générateur interactif de fractale de Sierpinski
-          </p>
+          <div className="max-w-2xl mx-auto">
+            <Card className="p-4 hover-elevate cursor-pointer">
+              <p className="text-lg text-muted-foreground">
+                Explorez la fractale infinie de Sierpinski avec ses motifs auto-similaires générés par un algorithme XOR
+              </p>
+            </Card>
+          </div>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
@@ -446,11 +450,6 @@ export default function Sierpinski() {
           <Link href="/">
             <Button variant="outline" size="sm" data-testid="link-home">
               ← Accueil
-            </Button>
-          </Link>
-          <Link href="/somme">
-            <Button variant="outline" size="sm" data-testid="link-somme">
-              Somme des Carrés →
             </Button>
           </Link>
         </div>
