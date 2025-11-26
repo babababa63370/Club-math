@@ -99,8 +99,6 @@ export default function Game() {
 
   return (
     <div className="min-h-screen bg-background">
-      <NavBar />
-
       <div className="max-w-2xl mx-auto px-6 py-12">
         <header className="text-center py-8 mb-8">
           <div className="flex items-center justify-between mb-4">
