@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Plus, Minus, RotateCcw, Download } from "lucide-react";
+import { Plus, Minus, RotateCcw, Download, X, Menu as MenuIcon, Moon, Sun, Star, History } from "lucide-react";
 import { Link } from "wouter";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
@@ -20,9 +20,11 @@ export default function Sierpinski() {
   const [lineSearch, setLineSearch] = useState("");
   const [searchResult, setSearchResult] = useState<number | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const gridViewportRef = useRef<HTMLDivElement>(null);
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const { theme, toggleTheme } = useTheme();
+  const { colorPalette, setShowColorPicker } = useTheme();
 
   const CELL_SIZE = 40;
   const MIN_ZOOM = 50;
@@ -170,6 +172,147 @@ export default function Sierpinski() {
   return (
     <div className="min-h-screen bg-background">
       <NavBar />
+      
+      {showMobileMenu && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/20 z-40" 
+            onClick={() => setShowMobileMenu(false)}
+          />
+          <div 
+            className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 animate-slide-in p-4 space-y-3 overflow-y-auto"
+          >
+            <button
+              onClick={() => {
+                setShowMobileMenu(false);
+              }}
+              className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+            >
+              <Star className="h-5 w-5 inline mr-2" />
+              Favoris
+            </button>
+
+            <button
+              onClick={() => {
+                setShowMobileMenu(false);
+              }}
+              className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+            >
+              <History className="h-5 w-5 inline mr-2" />
+              Historique
+            </button>
+
+            <button
+              onClick={() => {
+                toggleTheme();
+                setShowMobileMenu(false);
+              }}
+              className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+            >
+              {theme === "light" ? (
+                <>
+                  <Moon className="h-5 w-5 inline mr-2" />
+                  Mode Sombre
+                </>
+              ) : (
+                <>
+                  <Sun className="h-5 w-5 inline mr-2" />
+                  Mode Clair
+                </>
+              )}
+            </button>
+
+            <button
+              onClick={() => {
+                setShowColorPicker(true);
+                setShowMobileMenu(false);
+              }}
+              className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+            >
+              <div className="h-5 w-5 rounded-full bg-primary inline mr-2" />
+              Couleurs
+            </button>
+
+            <Link href="/">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                ← Accueil
+              </button>
+            </Link>
+
+            <Link href="/somme">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                Somme des Carrés →
+              </button>
+            </Link>
+
+            <div className="border-t border-border my-2" />
+
+            <Link href="/about">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                À Propos
+              </button>
+            </Link>
+
+            <div className="border-t border-border my-2" />
+
+            <p className="text-xs text-muted-foreground px-2 font-semibold">JEUX & EXPLORATIONS</p>
+
+            <Link href="/game">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                🎮 Jeu du Cycle
+              </button>
+            </Link>
+
+            <Link href="/hall-of-fame">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                🏆 Hall of Fame
+              </button>
+            </Link>
+
+            <Link href="/art">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                🎨 Générateur Art
+              </button>
+            </Link>
+
+            <Link href="/zen">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                🧘 Mode Zen
+              </button>
+            </Link>
+
+            <Link href="/fake">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
+              >
+                🤔 Mode Fake
+              </button>
+            </Link>
+          </div>
+        </>
+      )}
 
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
         <header className="text-center py-6 mb-8">
