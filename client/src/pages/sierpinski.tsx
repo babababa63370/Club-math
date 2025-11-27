@@ -604,6 +604,11 @@ export default function Sierpinski() {
               ← Accueil
             </Button>
           </Link>
+          <Link href="/somme">
+            <Button variant="outline" size="sm" data-testid="link-somme">
+              Somme des Carrés →
+            </Button>
+          </Link>
         </div>
 
         <Dialog open={showColorPicker} onOpenChange={setShowColorPicker}>
