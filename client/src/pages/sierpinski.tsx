@@ -6,6 +6,7 @@ import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { NavBar } from "@/components/nav-bar";
+import html2canvas from "html2canvas";
 
 interface SierpinskiGrid {
   row: number[];
@@ -152,30 +153,20 @@ export default function Sierpinski() {
   const redPercent = totalCells > 0 ? ((redCells / totalCells) * 100).toFixed(1) : "0";
 
   const downloadImage = async () => {
-    const container = gridContainerRef.current;
-    if (!container) return;
+    const element = gridContainerRef.current;
+    if (!element) return;
 
     try {
-      // Temporarily remove scale transform for capture
-      const originalTransform = container.style.transform;
-      container.style.transform = "scale(1)";
-      
-      const canvas = await (window as any).html2canvas(container, {
+      const canvas = await html2canvas(element, {
         backgroundColor: theme === "light" ? "#ffffff" : "#1a1a1a",
         scale: 2,
-        allowTaint: true,
-        useCORS: true,
       });
-      
-      // Restore original transform
-      container.style.transform = originalTransform;
-      
       const link = document.createElement("a");
-      link.href = canvas.toDataURL();
       link.download = `sierpinski-${numRows}.png`;
+      link.href = canvas.toDataURL();
       link.click();
     } catch (error) {
-      console.error("Download failed:", error);
+      console.error("Erreur lors du téléchargement:", error);
     }
   };
 
