@@ -181,25 +181,6 @@ export default function Sierpinski() {
           <div 
             className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 animate-slide-in p-4 space-y-3 overflow-y-auto"
           >
-            <button
-              onClick={() => {
-                setShowMobileMenu(false);
-              }}
-              className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-            >
-              <Star className="h-5 w-5 inline mr-2" />
-              Favoris
-            </button>
-
-            <button
-              onClick={() => {
-                setShowMobileMenu(false);
-              }}
-              className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-            >
-              <History className="h-5 w-5 inline mr-2" />
-              Historique
-            </button>
 
             <button
               onClick={() => {
