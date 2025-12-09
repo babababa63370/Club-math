@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun, X, Star, Share2, Maximize2, HelpCircle, Menu } from "lucide-react";
+import { ArrowDown, RefreshCw, Info, History, Trash2, Clock, BarChart3, Download, FileImage, Moon, Sun, X, Star, Share2, Maximize2, HelpCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { useTheme, type ColorPalette } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
@@ -17,29 +18,67 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import type { CalculationResult, HistoryEntry, MultiCalculationResult } from "@shared/schema";
 
-export default function Home() {
-  // Add animation styles
-  useEffect(() => {
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes slideIn {
-        from {
-          transform: translateX(100%);
-          opacity: 0;
-        }
-        to {
-          transform: translateX(0);
-          opacity: 1;
-        }
-      }
-      .animate-slide-in {
-        animation: slideIn 0.3s ease-out;
-      }
-    `;
-    document.head.appendChild(style);
-    return () => style.remove();
-  }, []);
+function AnimatedMenuIcon({ isOpen }: { isOpen: boolean }) {
+  return (
+    <div className="w-5 h-5 flex flex-col justify-center items-center">
+      <motion.span
+        className="block w-5 h-0.5 bg-current origin-center"
+        animate={{
+          rotate: isOpen ? 45 : 0,
+          y: isOpen ? 0 : -4,
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+      />
+      <motion.span
+        className="block w-5 h-0.5 bg-current origin-center"
+        animate={{
+          opacity: isOpen ? 0 : 1,
+          scaleX: isOpen ? 0 : 1,
+        }}
+        transition={{ duration: 0.2 }}
+      />
+      <motion.span
+        className="block w-5 h-0.5 bg-current origin-center"
+        animate={{
+          rotate: isOpen ? -45 : 0,
+          y: isOpen ? 0 : 4,
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+      />
+    </div>
+  );
+}
 
+const menuVariants = {
+  hidden: { x: "100%", opacity: 0 },
+  visible: { 
+    x: 0, 
+    opacity: 1,
+    transition: { 
+      type: "spring", 
+      stiffness: 300, 
+      damping: 30,
+      staggerChildren: 0.05,
+      delayChildren: 0.1
+    }
+  },
+  exit: { 
+    x: "100%", 
+    opacity: 0,
+    transition: { duration: 0.2 }
+  }
+};
+
+const itemVariants = {
+  hidden: { x: 20, opacity: 0 },
+  visible: { 
+    x: 0, 
+    opacity: 1,
+    transition: { type: "spring", stiffness: 300, damping: 24 }
+  }
+};
+
+export default function Home() {
   const [inputValue, setInputValue] = useState("");
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [multiResults, setMultiResults] = useState<MultiCalculationResult[]>([]);
@@ -332,15 +371,20 @@ export default function Home() {
               >
                 <History className="h-5 w-5" />
               </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setShowMobileMenu(!showMobileMenu)}
-                data-testid="button-mobile-menu"
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 className="md:hidden"
               >
-                <Menu className="h-5 w-5" />
-              </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setShowMobileMenu(!showMobileMenu)}
+                  data-testid="button-mobile-menu"
+                >
+                  <AnimatedMenuIcon isOpen={showMobileMenu} />
+                </Button>
+              </motion.div>
             </div>
           </div>
           <div className="max-w-2xl mx-auto">
@@ -357,138 +401,181 @@ export default function Home() {
           </div>
         </header>
 
-        {showMobileMenu && (
-          <>
-            <div 
-              className="fixed inset-0 bg-black/20 z-40 md:hidden" 
-              onClick={() => setShowMobileMenu(false)}
-              data-testid="mobile-menu-backdrop"
-            />
-            <div 
-              className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 md:hidden animate-slide-in"
-              data-testid="mobile-menu"
-            >
-              <div className="p-4 space-y-3">
-                <button
-                  onClick={() => {
-                    setShowFavorites(!showFavorites);
-                    setShowMobileMenu(false);
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                >
-                  <Star className={`h-5 w-5 ${showFavorites ? "fill-yellow-500" : ""}`} />
-                  <span>Favoris</span>
-                </button>
-                
-                <button
-                  onClick={() => {
-                    setShowHistory(!showHistory);
-                    setShowMobileMenu(false);
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                >
-                  <History className="h-5 w-5" />
-                  <span>Historique</span>
-                </button>
-                
-                <button
-                  onClick={() => {
-                    toggleTheme();
-                    setShowMobileMenu(false);
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                >
-                  {theme === "light" ? (
-                    <>
-                      <Moon className="h-5 w-5" />
-                      <span>Mode Sombre</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sun className="h-5 w-5" />
-                      <span>Mode Clair</span>
-                    </>
-                  )}
-                </button>
-                
-                <button
-                  onClick={() => {
-                    setShowColorPicker(true);
-                    setShowMobileMenu(false);
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                >
-                  <div className="h-5 w-5 rounded-full bg-primary" />
-                  <span>Couleurs</span>
-                </button>
-
-                <Link href="/about">
-                  <button
-                    onClick={() => setShowMobileMenu(false)}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+        <AnimatePresence>
+          {showMobileMenu && (
+            <>
+              <motion.div 
+                className="fixed inset-0 bg-black/20 z-40 md:hidden" 
+                onClick={() => setShowMobileMenu(false)}
+                data-testid="mobile-menu-backdrop"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              />
+              <motion.div 
+                className="fixed top-0 right-0 h-screen w-64 bg-card border-l shadow-lg z-50 md:hidden"
+                data-testid="mobile-menu"
+                variants={menuVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                <div className="p-4 space-y-3">
+                  <motion.button
+                    variants={itemVariants}
+                    onClick={() => {
+                      setShowFavorites(!showFavorites);
+                      setShowMobileMenu(false);
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left hover:bg-accent transition-colors"
+                    whileHover={{ x: 8 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    <HelpCircle className="h-5 w-5" />
-                    <span>À Propos</span>
-                  </button>
-                </Link>
-
-                <div className="border-t my-2" />
-
-                <div className="border-t my-2" />
-
-                <Link href="/somme/game">
-                  <button
-                    onClick={() => setShowMobileMenu(false)}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+                    <Star className={`h-5 w-5 ${showFavorites ? "fill-yellow-500" : ""}`} />
+                    <span>Favoris</span>
+                  </motion.button>
+                  
+                  <motion.button
+                    variants={itemVariants}
+                    onClick={() => {
+                      setShowHistory(!showHistory);
+                      setShowMobileMenu(false);
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left hover:bg-accent transition-colors"
+                    whileHover={{ x: 8 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    <span className="text-lg">🎮</span>
-                    <span>Jeu du Cycle</span>
-                  </button>
-                </Link>
-
-                <Link href="/somme/hall-of-fame">
-                  <button
-                    onClick={() => setShowMobileMenu(false)}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+                    <History className="h-5 w-5" />
+                    <span>Historique</span>
+                  </motion.button>
+                  
+                  <motion.button
+                    variants={itemVariants}
+                    onClick={() => {
+                      toggleTheme();
+                      setShowMobileMenu(false);
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left hover:bg-accent transition-colors"
+                    whileHover={{ x: 8 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    <span className="text-lg">🏆</span>
-                    <span>Hall of Fame</span>
-                  </button>
-                </Link>
-
-                <Link href="/somme/art">
-                  <button
-                    onClick={() => setShowMobileMenu(false)}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
+                    {theme === "light" ? (
+                      <>
+                        <Moon className="h-5 w-5" />
+                        <span>Mode Sombre</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sun className="h-5 w-5" />
+                        <span>Mode Clair</span>
+                      </>
+                    )}
+                  </motion.button>
+                  
+                  <motion.button
+                    variants={itemVariants}
+                    onClick={() => {
+                      setShowColorPicker(true);
+                      setShowMobileMenu(false);
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left hover:bg-accent transition-colors"
+                    whileHover={{ x: 8 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    <span className="text-lg">🎨</span>
-                    <span>Générateur Art</span>
-                  </button>
-                </Link>
+                    <div className="h-5 w-5 rounded-full bg-primary" />
+                    <span>Couleurs</span>
+                  </motion.button>
 
-                <Link href="/somme/zen">
-                  <button
-                    onClick={() => setShowMobileMenu(false)}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                  >
-                    <span className="text-lg">🧘</span>
-                    <span>Mode Zen</span>
-                  </button>
-                </Link>
+                  <motion.div variants={itemVariants}>
+                    <Link href="/about">
+                      <motion.button
+                        onClick={() => setShowMobileMenu(false)}
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left hover:bg-accent transition-colors"
+                        whileHover={{ x: 8 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <HelpCircle className="h-5 w-5" />
+                        <span>À Propos</span>
+                      </motion.button>
+                    </Link>
+                  </motion.div>
 
-                <Link href="/somme/fake">
-                  <button
-                    onClick={() => setShowMobileMenu(false)}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover-elevate text-left"
-                  >
-                    <span className="text-lg">🎭</span>
-                    <span>Mode Fake</span>
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </>
-        )}
+                  <motion.div variants={itemVariants} className="border-t my-2" />
+
+                  <motion.div variants={itemVariants}>
+                    <Link href="/somme/game">
+                      <motion.button
+                        onClick={() => setShowMobileMenu(false)}
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left hover:bg-accent transition-colors"
+                        whileHover={{ x: 8 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <span className="text-lg">🎮</span>
+                        <span>Jeu du Cycle</span>
+                      </motion.button>
+                    </Link>
+                  </motion.div>
+
+                  <motion.div variants={itemVariants}>
+                    <Link href="/somme/hall-of-fame">
+                      <motion.button
+                        onClick={() => setShowMobileMenu(false)}
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left hover:bg-accent transition-colors"
+                        whileHover={{ x: 8 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <span className="text-lg">🏆</span>
+                        <span>Hall of Fame</span>
+                      </motion.button>
+                    </Link>
+                  </motion.div>
+
+                  <motion.div variants={itemVariants}>
+                    <Link href="/somme/art">
+                      <motion.button
+                        onClick={() => setShowMobileMenu(false)}
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left hover:bg-accent transition-colors"
+                        whileHover={{ x: 8 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <span className="text-lg">🎨</span>
+                        <span>Générateur Art</span>
+                      </motion.button>
+                    </Link>
+                  </motion.div>
+
+                  <motion.div variants={itemVariants}>
+                    <Link href="/somme/zen">
+                      <motion.button
+                        onClick={() => setShowMobileMenu(false)}
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left hover:bg-accent transition-colors"
+                        whileHover={{ x: 8 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <span className="text-lg">🧘</span>
+                        <span>Mode Zen</span>
+                      </motion.button>
+                    </Link>
+                  </motion.div>
+
+                  <motion.div variants={itemVariants}>
+                    <Link href="/somme/fake">
+                      <motion.button
+                        onClick={() => setShowMobileMenu(false)}
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left hover:bg-accent transition-colors"
+                        whileHover={{ x: 8 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <span className="text-lg">🎭</span>
+                        <span>Mode Fake</span>
+                      </motion.button>
+                    </Link>
+                  </motion.div>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
 
         <div className="max-w-md mx-auto mb-16">
           <div className="flex flex-col gap-4">
