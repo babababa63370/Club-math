@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { ArrowLeft, ArrowDown, RefreshCw, Info, Download, FileImage, Moon, Sun, X, Menu as MenuIcon, BarChart3, Maximize2 } from "lucide-react";
+import { ArrowLeft, ArrowDown, RefreshCw, Info, Download, FileImage, Moon, Sun, X, Menu as MenuIcon, BarChart3, Maximize2, List, LayoutGrid, Search } from "lucide-react";
 import { Link } from "wouter";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
@@ -22,8 +22,13 @@ export default function Cube() {
   const [error, setError] = useState("");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showFullscreen, setShowFullscreen] = useState(false);
+  const [viewMode, setViewMode] = useState<"detailed" | "list">("detailed");
+  const [showSearchStep, setShowSearchStep] = useState(false);
+  const [searchStepValue, setSearchStepValue] = useState("");
+  const [highlightedStep, setHighlightedStep] = useState<number | null>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<HTMLDivElement>(null);
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
   const { theme, toggleTheme } = useTheme();
 
   const handleCalculate = () => {
@@ -115,6 +120,27 @@ export default function Cube() {
       2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹', 10: '¹⁰'
     };
     return superscripts[p] || `^${p}`;
+  };
+
+  const handleSearchStep = () => {
+    const stepNum = parseInt(searchStepValue, 10);
+    if (isNaN(stepNum) || stepNum < 1 || !result || stepNum > result.steps.length) {
+      return;
+    }
+    const stepIndex = stepNum - 1;
+    setHighlightedStep(stepIndex);
+    setShowSearchStep(false);
+    setSearchStepValue("");
+    
+    setTimeout(() => {
+      if (stepRefs.current[stepIndex]) {
+        stepRefs.current[stepIndex]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
+    
+    setTimeout(() => {
+      setHighlightedStep(null);
+    }, 3000);
   };
 
   return (
@@ -354,32 +380,96 @@ export default function Cube() {
           </DialogContent>
         </Dialog>
 
+        <Dialog open={showSearchStep} onOpenChange={setShowSearchStep}>
+          <DialogContent className="max-w-sm" data-testid="search-step-dialog">
+            <DialogHeader>
+              <DialogTitle>Rechercher une Étape</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Numéro de l'étape (1-{result?.steps.length || 0})
+                </label>
+                <Input
+                  type="number"
+                  value={searchStepValue}
+                  onChange={(e) => setSearchStepValue(e.target.value)}
+                  onKeyPress={(e) => e.key === "Enter" && handleSearchStep()}
+                  placeholder="Ex: 5"
+                  min="1"
+                  max={result?.steps.length || 1}
+                  className="w-full"
+                  data-testid="input-search-step"
+                />
+              </div>
+              <Button
+                onClick={handleSearchStep}
+                className="w-full"
+                data-testid="button-go-to-step"
+              >
+                Aller à l'étape
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
         {result && (
           <div className="space-y-6">
-            <div className="flex justify-end gap-2 flex-wrap">
-              <Button
-                variant="outline"
-                onClick={handleExportImage}
-                data-testid="button-export-image"
-              >
-                <FileImage className="h-4 w-4 mr-2" />
-                Image
-              </Button>
-              <Button
-                variant="outline"
-                onClick={handleExportPDF}
-                data-testid="button-export-pdf"
-              >
-                <Download className="h-4 w-4 mr-2" />
-                PDF
-              </Button>
+            <div className="flex justify-between gap-2 flex-wrap">
+              <div className="flex gap-2">
+                <Button
+                  variant={viewMode === "detailed" ? "default" : "outline"}
+                  size="icon"
+                  onClick={() => setViewMode("detailed")}
+                  data-testid="button-view-detailed"
+                  title="Vue détaillée"
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant={viewMode === "list" ? "default" : "outline"}
+                  size="icon"
+                  onClick={() => setViewMode("list")}
+                  data-testid="button-view-list"
+                  title="Vue liste"
+                >
+                  <List className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setShowSearchStep(true)}
+                  data-testid="button-search-step"
+                  title="Rechercher une étape"
+                >
+                  <Search className="h-4 w-4" />
+                </Button>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={handleExportImage}
+                  data-testid="button-export-image"
+                >
+                  <FileImage className="h-4 w-4 mr-2" />
+                  Image
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleExportPDF}
+                  data-testid="button-export-pdf"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  PDF
+                </Button>
+              </div>
             </div>
 
             <div ref={resultsRef} data-testid="results-container">
               <Tabs defaultValue="steps" className="w-full">
                 <TabsList className="grid w-full grid-cols-2">
                   <TabsTrigger value="steps" data-testid="tab-steps">
-                    Étapes Détaillées
+                    Étapes {viewMode === "list" ? "(Liste)" : "(Détaillées)"}
                   </TabsTrigger>
                   <TabsTrigger value="graph" data-testid="tab-graph">
                     <BarChart3 className="h-4 w-4 mr-2" />
@@ -388,10 +478,42 @@ export default function Cube() {
                 </TabsList>
 
                 <TabsContent value="steps" className="space-y-6 mt-6">
+                  {viewMode === "list" ? (
+                    <Card className="p-4 rounded-xl">
+                      <div className="space-y-2 max-h-[500px] overflow-y-auto">
+                        {result.steps.map((step, index) => (
+                          <div
+                            key={index}
+                            ref={(el) => (stepRefs.current[index] = el)}
+                            className={`flex items-center gap-4 p-3 rounded-lg transition-all ${
+                              step.isInCycle ? "bg-primary/10 border border-primary/20" : "bg-muted/50"
+                            } ${highlightedStep === index ? "ring-2 ring-primary ring-offset-2" : ""}`}
+                            data-testid={`list-step-${index}`}
+                          >
+                            <Badge variant={step.isInCycle ? "default" : "secondary"}>
+                              {step.stepNumber + 1}
+                            </Badge>
+                            <div className="flex-1">
+                              <span className="font-mono font-bold text-lg">{step.originalNumber}</span>
+                              <span className="text-muted-foreground mx-2">→</span>
+                              <span className="text-sm text-muted-foreground">{step.calculation}</span>
+                            </div>
+                            {step.isCycleStart && (
+                              <Badge variant="outline" className="text-xs">
+                                Début du cycle
+                              </Badge>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </Card>
+                  ) : (
+                  <>
                   <div className="space-y-6">
                     {result.steps.map((step, index) => (
                       <div
                         key={index}
+                        ref={(el) => (stepRefs.current[index] = el)}
                         className="relative"
                         style={{
                           animation: `fadeIn 0.4s ease-out ${index * 0.1}s both`,
@@ -402,7 +524,7 @@ export default function Cube() {
                             step.isInCycle
                               ? "border-2 border-primary bg-primary/5"
                               : ""
-                          }`}
+                          } ${highlightedStep === index ? "ring-4 ring-primary ring-offset-2" : ""}`}
                           data-testid={`card-step-${index}`}
                         >
                           <div className="flex items-start justify-between gap-4 mb-4">
@@ -523,6 +645,8 @@ export default function Cube() {
                       </div>
                     </div>
                   </Card>
+                  </>
+                  )}
                 </TabsContent>
 
                 <TabsContent value="graph" className="mt-6">
