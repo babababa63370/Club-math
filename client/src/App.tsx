@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
 import Landing from "@/pages/landing";
 import Somme from "@/pages/somme";
+import Cube from "@/pages/cube";
 import Sierpinski from "@/pages/sierpinski";
 import About from "@/pages/about";
 import Dev5524 from "@/pages/dev-5524";
@@ -21,6 +22,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Landing} />
       <Route path="/somme" component={Somme} />
+      <Route path="/cube" component={Cube} />
       <Route path="/sierpinski" component={Sierpinski} />
       <Route path="/about" component={About} />
       <Route path="/dev-5524" component={Dev5524} />
