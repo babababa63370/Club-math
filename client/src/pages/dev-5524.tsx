@@ -228,36 +228,6 @@ if __name__ == '__main__':
                 À propos
               </button>
             </Link>
-
-            <Link href="/somme/game">
-              <button
-                onClick={() => setShowMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                🎮 Jeu du Cycle
-              </button>
-            </Link>
-
-            <Link href="/somme/fake">
-              <button
-                onClick={() => setShowMenu(false)}
-                className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
-              >
-                🎭 Mode Fake
-              </button>
-            </Link>
-          </div>
-        </>
-      )}
-
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="mb-8">
-          <Link href="/">
-            <Button variant="outline" size="sm" className="hidden md:inline-flex">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Retour
-            </Button>
-          </Link>
         </div>
 
         <div className="space-y-12">
