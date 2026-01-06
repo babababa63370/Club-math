@@ -173,9 +173,6 @@ export default function Landing() {
                   <div className="space-y-2 text-sm">
                     <p>✨ Décomposition de nombres</p>
                     <p>✨ Détection de cycles</p>
-                    <p>✨ Jeu interactif</p>
-                    <p>✨ Visualisations artistiques</p>
-                    <p>✨ Hall of Fame & Mode Zen</p>
                   </div>
                 </div>
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
@@ -204,9 +201,6 @@ export default function Landing() {
                   <div className="space-y-2 text-sm">
                     <p>✨ Fractales mathématiques</p>
                     <p>✨ Construction itérative</p>
-                    <p>✨ Zooms infinis</p>
-                    <p>✨ Propriétés étonnantes</p>
-                    <p>✨ Patterns autosimilaires</p>
                   </div>
                 </div>
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
