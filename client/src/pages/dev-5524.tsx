@@ -228,74 +228,76 @@ if __name__ == '__main__':
                 À propos
               </button>
             </Link>
+          </div>
+        </>
+      )}
+
+      {/* Page content (always rendered) */}
+      <div className="space-y-12">
+        <div>
+          <h1 className="text-4xl font-bold mb-8">Code Source - Anecdote Dev</h1>
         </div>
 
-        <div className="space-y-12">
-          <div>
-            <h1 className="text-4xl font-bold mb-8">Code Source - Anecdote Dev</h1>
+        <div className="space-y-8">
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold">TypeScript: Algorithme Principal</h2>
+            <div className="rounded-lg overflow-hidden">
+              <SyntaxHighlighter 
+                language="typescript" 
+                style={atomOneDark}
+                customStyle={{ padding: '24px', borderRadius: '8px' }}
+              >
+                {typeScriptCode1}
+              </SyntaxHighlighter>
+            </div>
           </div>
 
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold">TypeScript: Algorithme Principal</h2>
-              <div className="rounded-lg overflow-hidden">
-                <SyntaxHighlighter 
-                  language="typescript" 
-                  style={atomOneDark}
-                  customStyle={{ padding: '24px', borderRadius: '8px' }}
-                >
-                  {typeScriptCode1}
-                </SyntaxHighlighter>
-              </div>
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold">TypeScript: Algorithme Inverse</h2>
+            <div className="rounded-lg overflow-hidden">
+              <SyntaxHighlighter 
+                language="typescript" 
+                style={atomOneDark}
+                customStyle={{ padding: '24px', borderRadius: '8px' }}
+              >
+                {typeScriptCode2}
+              </SyntaxHighlighter>
             </div>
+          </div>
 
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold">TypeScript: Algorithme Inverse</h2>
-              <div className="rounded-lg overflow-hidden">
-                <SyntaxHighlighter 
-                  language="typescript" 
-                  style={atomOneDark}
-                  customStyle={{ padding: '24px', borderRadius: '8px' }}
-                >
-                  {typeScriptCode2}
-                </SyntaxHighlighter>
-              </div>
+          <div className="border-t pt-8 space-y-4">
+            <h2 className="text-2xl font-bold">Python: Algorithme Principal</h2>
+            <p className="text-sm text-muted-foreground">Prêt à copier-coller :</p>
+            <div className="rounded-lg overflow-hidden">
+              <SyntaxHighlighter 
+                language="python" 
+                style={atomOneDark}
+                customStyle={{ padding: '24px', borderRadius: '8px' }}
+              >
+                {pythonCode1}
+              </SyntaxHighlighter>
             </div>
+          </div>
 
-            <div className="border-t pt-8 space-y-4">
-              <h2 className="text-2xl font-bold">Python: Algorithme Principal</h2>
-              <p className="text-sm text-muted-foreground">Prêt à copier-coller :</p>
-              <div className="rounded-lg overflow-hidden">
-                <SyntaxHighlighter 
-                  language="python" 
-                  style={atomOneDark}
-                  customStyle={{ padding: '24px', borderRadius: '8px' }}
-                >
-                  {pythonCode1}
-                </SyntaxHighlighter>
-              </div>
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold">Python: Algorithme Inverse</h2>
+            <p className="text-sm text-muted-foreground">Chercher par longueur de cycle :</p>
+            <div className="rounded-lg overflow-hidden">
+              <SyntaxHighlighter 
+                language="python" 
+                style={atomOneDark}
+                customStyle={{ padding: '24px', borderRadius: '8px' }}
+              >
+                {pythonCode2}
+              </SyntaxHighlighter>
             </div>
+          </div>
 
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold">Python: Algorithme Inverse</h2>
-              <p className="text-sm text-muted-foreground">Chercher par longueur de cycle :</p>
-              <div className="rounded-lg overflow-hidden">
-                <SyntaxHighlighter 
-                  language="python" 
-                  style={atomOneDark}
-                  customStyle={{ padding: '24px', borderRadius: '8px' }}
-                >
-                  {pythonCode2}
-                </SyntaxHighlighter>
-              </div>
-            </div>
-
-            <div className="bg-primary/10 p-6 rounded-lg space-y-3">
-              <h3 className="font-bold">Notes importantes:</h3>
-              <p className="text-sm">• Code Python prêt à copier-coller directement</p>
-              <p className="text-sm">• Nombres heureux (cycle=1): 1, 7, 10, 13, 19, 23, 28, 31, ...</p>
-              <p className="text-sm">• Cycle principal: 4 → 16 → 37 → 58 → 89 → 145 → 42 → 20 → 4</p>
-            </div>
+          <div className="bg-primary/10 p-6 rounded-lg space-y-3">
+            <h3 className="font-bold">Notes importantes:</h3>
+            <p className="text-sm">• Code Python prêt à copier-coller directement</p>
+            <p className="text-sm">• Nombres heureux (cycle=1): 1, 7, 10, 13, 19, 23, 28, 31, ...</p>
+            <p className="text-sm">• Cycle principal: 4 → 16 → 37 → 58 → 89 → 145 → 42 → 20 → 4</p>
           </div>
         </div>
       </div>
