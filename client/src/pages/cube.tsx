@@ -46,6 +46,7 @@ export default function Cube() {
     }
     
     setError("");
+    // Use BigInt directly to avoid precision loss
     const calculationResult = calculatePowerSum(number, power);
     setResult(calculationResult);
   };

@@ -410,14 +410,17 @@ export default function Sierpinski() {
                   {/* Header Row */}
                   <div className="sticky top-0 left-0 z-10 w-12 h-10 bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs"></div>
                   <div style={{ display: "inline-grid", gridTemplateColumns: `repeat(${gridWidth}, 1fr)` }}>
-                    {Array.from({ length: gridWidth }).map((_, i) => (
-                      <div
-                        key={`header-${i}`}
-                        className="w-10 h-10 bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs border border-border"
-                      >
-                        {i}
-                      </div>
-                    ))}
+                    {Array.from({ length: gridWidth }).map((_, i) => {
+                      const centeredVal = i - Math.floor(gridWidth / 2);
+                      return (
+                        <div
+                          key={`header-${i}`}
+                          className="w-10 h-10 bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs border border-border"
+                        >
+                          {centeredVal}
+                        </div>
+                      );
+                    })}
                   </div>
 
                   {/* Grid Rows */}

@@ -116,25 +116,19 @@ export default function Home() {
       return;
     }
     
-    const parsedNumbers = numbers.map(n => parseInt(n, 10));
-    const invalidParsed = parsedNumbers.filter(n => isNaN(n) || n < 0);
-    if (invalidParsed.length > 0) {
-      setError("Veuillez entrer uniquement des nombres entiers positifs");
-      setResult(null);
-      setMultiResults([]);
-      return;
-    }
+    const parsedNumbersStrings = numbers.filter(n => /^\d+$/.test(n));
     
     setError("");
     
-    if (parsedNumbers.length === 1) {
-      const calculationResult = calculateSquareSum(parsedNumbers[0]);
+    if (parsedNumbersStrings.length === 1) {
+      const calculationResult = calculateSquareSum(parsedNumbersStrings[0]);
       setResult(calculationResult);
       setMultiResults([]);
-      addToHistory(parsedNumbers[0], calculationResult);
+      // We still use Number for history storage if it fits, but the detector handles BigInt
+      addToHistory(parseInt(parsedNumbersStrings[0], 10) || 0, calculationResult);
     } else {
-      const results = parsedNumbers.map(num => ({
-        inputNumber: num,
+      const results = parsedNumbersStrings.map(num => ({
+        inputNumber: parseInt(num, 10) || 0,
         result: calculateSquareSum(num),
       }));
       setResult(null);
