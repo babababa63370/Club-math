@@ -262,15 +262,6 @@ export default function Sierpinski() {
               🔺 Triangle de Sierpinski
             </h1>
             <div className="flex-1 flex justify-end gap-2">
-              <Link href="/cube">
-                <Button
-                  variant="outline"
-                  className="hidden md:inline-flex"
-                  data-testid="button-cube-link"
-                >
-                  Cubes
-                </Button>
-              </Link>
               <Button
                 variant="outline"
                 size="icon"
