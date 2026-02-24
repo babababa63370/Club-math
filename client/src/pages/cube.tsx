@@ -45,15 +45,8 @@ export default function Cube() {
       return;
     }
     
-    const parsedNumber = parseInt(number, 10);
-    if (isNaN(parsedNumber) || parsedNumber < 0) {
-      setError("Veuillez entrer un nombre entier positif");
-      setResult(null);
-      return;
-    }
-    
     setError("");
-    const calculationResult = calculatePowerSum(parsedNumber, power);
+    const calculationResult = calculatePowerSum(number, power);
     setResult(calculationResult);
   };
 

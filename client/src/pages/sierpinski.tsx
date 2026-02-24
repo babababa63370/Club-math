@@ -222,6 +222,15 @@ export default function Sierpinski() {
               </button>
             </Link>
 
+            <Link href="/cube">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="w-full px-4 py-3 rounded-lg hover-elevate text-left text-primary font-bold"
+              >
+                Autres puissances (Cube) →
+              </button>
+            </Link>
+
             <Link href="/somme">
               <button
                 onClick={() => setShowMobileMenu(false)}
@@ -253,6 +262,15 @@ export default function Sierpinski() {
               🔺 Triangle de Sierpinski
             </h1>
             <div className="flex-1 flex justify-end gap-2">
+              <Link href="/cube">
+                <Button
+                  variant="outline"
+                  className="hidden md:inline-flex"
+                  data-testid="button-cube-link"
+                >
+                  Cubes
+                </Button>
+              </Link>
               <Button
                 variant="outline"
                 size="icon"
@@ -397,7 +415,7 @@ export default function Sierpinski() {
                         key={`header-${i}`}
                         className="w-10 h-10 bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs border border-border"
                       >
-                        {i + 1}
+                        {i}
                       </div>
                     ))}
                   </div>
@@ -406,7 +424,7 @@ export default function Sierpinski() {
                   {grid.map((item, rowIdx) => (
                     <div key={`row-${rowIdx}`} style={{ display: "contents" }}>
                       <div className="w-12 h-10 bg-muted flex items-center justify-center font-bold text-xs border border-border sticky left-0 z-9">
-                        L{rowIdx + 1}
+                        L{rowIdx}
                       </div>
                       <div
                         style={{ display: "inline-grid", gridTemplateColumns: `repeat(${gridWidth}, 1fr)` }}

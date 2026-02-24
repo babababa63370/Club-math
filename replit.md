@@ -37,6 +37,7 @@ Le projet héberge une page d'accueil (Landing) qui présente les deux thèmes a
 Tous les menus incluent :
 - Lien d'accueil (vers landing)
 - Lien vers l'autre thème (Sierpinski ↔ Somme)
+- Lien vers **Autres puissances (Cube)** (NEW)
 - Séparateur visuel
 - Tous les outils et pages amusantes
 

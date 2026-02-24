@@ -323,6 +323,15 @@ export default function Home() {
                   <HelpCircle className="h-5 w-5" />
                 </Button>
               </Link>
+              <Link href="/cube">
+                <Button
+                  variant="outline"
+                  className="hidden md:inline-flex"
+                  data-testid="button-cube-link"
+                >
+                  Cubes
+                </Button>
+              </Link>
               <Button
                 variant="outline"
                 size="icon"
@@ -412,6 +421,15 @@ export default function Home() {
                   className="w-full px-4 py-3 rounded-lg hover-elevate text-left"
                 >
                   ← Accueil
+                </button>
+              </Link>
+
+              <Link href="/cube">
+                <button
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-3 rounded-lg hover-elevate text-left text-primary font-bold"
+                >
+                  Autres puissances (Cube) →
                 </button>
               </Link>
 
