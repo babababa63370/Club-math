@@ -33,7 +33,6 @@ export default function Sierpinski() {
   const ZOOM_STEP = 10;
   const PAN_STEP = 50;
 
-  // Generate Sierpinski Grid using XOR algorithm
   const generateSierpinskiGrid = (rows: number): SierpinskiGrid[] => {
     if (rows <= 0) return [];
 
@@ -43,11 +42,9 @@ export default function Sierpinski() {
       .map(() => Array(numCols).fill(0));
     const redCounts: number[] = Array(rows).fill(0);
 
-    // Start with center cell
     newGrid[0][Math.floor(numCols / 2)] = 1;
     redCounts[0] = 1;
 
-    // Generate each row using XOR of parents
     for (let y = 1; y < rows; y++) {
       let currentRedCount = 0;
       for (let x = 0; x < numCols; x++) {
